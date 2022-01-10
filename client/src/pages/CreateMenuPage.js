@@ -3,10 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Loader } from '../components/Loader';
 
 import {
-  Stack,
-  CircularProgress,
   Button,
-  Input,
   IconButton,
   TextField,
   Paper,
@@ -168,8 +165,6 @@ export const CreateMenuPage = () => {
     },
   }));
 
-  console.log(menu);
-
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
@@ -190,7 +185,7 @@ export const CreateMenuPage = () => {
         >
           <TextField
             InputLabelProps={{ shrink: true }}
-            label='Название:'            
+            label='Название:'
             name='name'
             value={form.name}
             onChange={changeHandler}

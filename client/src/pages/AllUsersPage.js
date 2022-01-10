@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Loader } from '../components/Loader';
 
 import {
-  CircularProgress,
-  Button,
   IconButton,
-  TextField,
   Paper,
   Table,
   TableBody,
@@ -15,12 +12,11 @@ import {
   TableRow,
 } from '@mui/material';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
-import Stack from '@mui/material/Stack';
-
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 
 import Grid from '@mui/material/Grid';
 
@@ -29,13 +25,6 @@ export const AllUsersPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
   const [users, setUsers] = useState([]);
-  const [form, setForm] = useState({
-    name: '',
-    quantity: '',
-  });
-
-  const [black, setBlack] = useState(true);
-  let btn_class = 'pink';
 
   useEffect(() => {
     fetch('/api/menu')
@@ -83,57 +72,7 @@ export const AllUsersPage = () => {
       );
   }
 
-  // Получение одного пользователя
-  async function GetUser(id) {
-    const response = await fetch('/api/menu/' + id, {
-      method: 'GET',
-      headers: { Accept: 'application/json' },
-    });
-    if (response.ok === true) {
-      const user = await response.json();
-      setForm((prevState) => ({
-        _id: user._id,
-        name: user.name,
-        cost: user.cost,
-        measure: user.measure,
-      }));
-    }
-  }
-
-  // Получение одного пользователя
-  // async function GetUser(id) {
-  //     const response = await fetch("/api/menu/" + id, {
-  //         method: "GET",
-  //         headers: { "Accept": "application/json" }
-  //     });
-  //     if (response.ok === true) {
-  //         const user = await response.json();
-  //         setForm(user);
-  //         console.log("user"); console.log(user);
-  //     }
-  // };
-
-  // Добавление пользователя
-  async function CreateUser() {
-    const response = await fetch('api/user', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: form.name,
-        quantity: form.quantity,
-      }),
-    });
-    if (response.ok === true) {
-      // const user = await response.json();
-      // reset();
-      // document.querySelector("tbody").append(row(user));
-    }
-  }
-
-  // Удаление пользователя
+  // Delete User
   async function DeleteUser(id) {
     const response = await fetch('/api/user/' + id, {
       method: 'DELETE',
@@ -144,41 +83,65 @@ export const AllUsersPage = () => {
     }
   }
 
-  const inputRef = useRef(true);
+  // Create array for joint table
 
-  // const changeFocus = () => {console.log(inputRef.current.name)
-  //     inputRef.current.disabled = false;
-  //     inputRef.current.focus();
-  // };
+  let newMenuAll = [];
+  if (menu.length) {
+    menu.map((item) => {
+      let newMenu = [];
+      newMenu.push(item.name);
+      newMenu.push(item.cost);
+      newMenu.push(item.measure);
+      newMenuAll.push(newMenu);
+    });
+  }
 
-  const update = (id, value, e) => {
-    if (e.which === 13) {
-      console.log(id);
-      console.log(value);
-      console.log(e);
-      //here 13 is key code for enter key
-      // updateTodo({ id, item: value });
-      // inputRef.current.disabled = true;
+  let finalArray = [];
+  if (users.length) {
+    let oderLenght = users[0].quantity.length;
+
+    for (let i = 0; i < oderLenght; i++) {
+      let newArray = [];
+      users.map((user) => {
+        return newArray.push(user.quantity[i]);
+      });      
+      newArray.map(Number);
+      finalArray.push(newArray.map(Number));
     }
-  };
+  }
 
-  const changeFocus = () => {
-    setBlack(!black);
-    // inputRef.current.btn_class = black ? "pink" : "red";
-    // inputRef.current.focus();
-  };
+  let allTable = [];
 
-  // Ввод формы
-  const changeHandler = (e) => {
-    setForm((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-  };
+  if (finalArray.length && newMenuAll.length) {
+    for (let i = 0; i < newMenuAll.length; i++) {
+      let all = [...newMenuAll[i], ...finalArray[i]];
 
-  // let btn_class = black ? "pink" : "red";
-  // const changeColor = () => {
-  //     setBlack(!black)
-  // }
+      allTable.push(all);
+    }
+  }
 
-  // Условный рендеринг компонента
+  const rows = allTable;
+
+  // for striped table
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
 
   if (error) {
     return <div>Ошибка: {error.message}</div>;
@@ -188,78 +151,54 @@ export const AllUsersPage = () => {
     return (
       <>
         <h2>Все посетители</h2>
-        <Grid container alignItems='flex-start' spacing={2}>
-          <Grid item xs={3} sm={3} md={3}>
-            <Table>
-              <TableHead color='secondary'>
-                <TableRow color='secondary'>
-                  <TableCell>Блюдо</TableCell>
-                  <TableCell>Цена</TableCell>
-                  <TableCell>Ед.изм</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {menu.map((product) => (
-                  <TableRow key={product._id}>
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>{product.cost}</TableCell>
-                    <TableCell>{product.measure}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Grid>
-          <Grid item xs={5} sm={5} md={5}>
-            {/*Users list*/}
-
-            <Table>
+        <Grid>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               <TableHead>
-                <TableRow>
+                <TableRow sx={{ backgroundColor: '#cceeff' }}>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Dish</TableCell>
+                  <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                    Cost
+                  </TableCell>
+                  <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                    Measure
+                  </TableCell>
                   {users.map((user) => (
-                    <TableCell key={user._id}>{user.name}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  {users.map((user, index) => (
-                    <TableCell key={user._id}>
-                      {user.quantity.map((value, index) => (
-                        <TextField
-                          key={index}
-                          size='small'
-                          ref={inputRef}
-                          // disabled={inputRef}
-                          defaultValue={value}
-                          onKeyPress={(e) =>
-                            update(user._id, inputRef.current.value, e)
-                          }
-                        ></TextField>
-                      ))}
-                      <Button
-                        // className={ inputRef }
-                        key={index}
-                        name={user._id}
-                        onClick={() => changeFocus(user._id)}
-                      >
-                        Edit
-                      </Button>
-                      <p />
-                      <Button
-                        className='pink lighten-3'
+                    <TableCell key={user._id} align='center'>
+                      Client&nbsp;<b>{user.name}</b>
+                      <IconButton
+                        edge='end'
+                        aria-label='delete'
                         variant='contained'
-                        color='secondary'
+                        color='error'
                         key={user._id}
                         onClick={() => DeleteUser(user._id)}
                       >
-                        Delete
-                      </Button>
+                        <DeleteIcon />
+                      </IconButton>
                     </TableCell>
                   ))}
                 </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <StyledTableRow
+                    key={(Math.random() + 1).toString(36).substring(7)}
+                  >
+                    {row.map((item, index) => (
+                      <StyledTableCell
+                        align='center'
+                        sx={{ '&:first-of-type': { textAlign: 'left' } }}
+                        key={(Math.random() + 1).toString(36).substring(7)}
+                      >
+                        {item}
+                      </StyledTableCell>
+                    ))}
+                  </StyledTableRow>
+                ))}
               </TableBody>
             </Table>
-          </Grid>
+          </TableContainer>
         </Grid>
       </>
     );

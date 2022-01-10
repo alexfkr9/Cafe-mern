@@ -5,9 +5,7 @@ import { Loader } from '../components/Loader';
 import Snack from '../components/Snack';
 
 import {
-  CircularProgress,
   Button,
-  IconButton,
   TextField,
   Paper,
   Table,
@@ -18,8 +16,6 @@ import {
 } from '@mui/material';
 
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-
-import Stack from '@mui/material/Stack';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -78,8 +74,8 @@ export const UserMenuPage = () => {
     console.log(event.target.id);
     console.log(event.target.value);
     arr[event.target.id] = event.target.value;
-    
-    setQuantity( arr.map(Number) );
+
+    setQuantity(arr.map(Number));
 
     console.log(arr);
     console.log(quantity);
@@ -105,7 +101,6 @@ export const UserMenuPage = () => {
     },
   }));
 
-  // Условный рендеринг компонента
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
@@ -130,9 +125,10 @@ export const UserMenuPage = () => {
             onChange={getName}
           />
           <Button
-            variant='contained' color='success'
+            variant='contained'
+            color='success'
             disabled={isDisable}
-            onClick={CreateUser}            
+            onClick={CreateUser}
           >
             Создать заказ
           </Button>
@@ -143,17 +139,23 @@ export const UserMenuPage = () => {
             <TableHead>
               <TableRow sx={{ backgroundColor: '#cceeff' }}>
                 <TableCell sx={{ fontWeight: 'bold' }}>Блюдо</TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>Цена</TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>Ед.изм</TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>Picture</TableCell>
-                <TableCell align='right' sx={{ fontWeight: 'bold' }}>Кол-во</TableCell>
+                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                  Цена
+                </TableCell>
+                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                  Ед.изм
+                </TableCell>
+                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                  Picture
+                </TableCell>
+                <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                  Кол-во
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {menu.map((product, index) => (
-                <StyledTableRow
-                  key={product._id}                
-                >
+                <StyledTableRow key={product._id}>
                   <StyledTableCell>{product.name}</StyledTableCell>
                   <StyledTableCell align='center'>
                     {product.cost}
@@ -165,7 +167,7 @@ export const UserMenuPage = () => {
                     <img src={`http://localhost:3000/${product.image}`} />
                   </StyledTableCell>
                   <StyledTableCell align='right'>
-                    <TextField                      
+                    <TextField
                       sx={{
                         maxWidth: '70px',
                       }}
@@ -173,8 +175,8 @@ export const UserMenuPage = () => {
                       name='quantity'
                       disabled={isDisable}
                       id={String(index)}
-                      value={ quantity[index] || 0 }                                       
-                      onChange={e => changeHandler(e)}                      
+                      value={quantity[index] || 0}
+                      onChange={(e) => changeHandler(e)}
                       autoComplete='off'
                     />
                   </StyledTableCell>
@@ -184,10 +186,7 @@ export const UserMenuPage = () => {
           </Table>
         </TableContainer>
 
-        <Snack
-            isOpen={isSnackOpen}
-            handleClose={() => setSnackOpen(false)}
-        />
+        <Snack isOpen={isSnackOpen} handleClose={() => setSnackOpen(false)} />
       </>
     );
   }
