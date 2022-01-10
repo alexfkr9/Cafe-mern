@@ -12,6 +12,7 @@ function Snack({isOpen, handleClose = Function.prototype}) {
             onClose={handleClose}
             autoHideDuration={4000}            
         >
+            
             <Alert                          
                 severity="success"                                
             >Товар добавлен в корзину!</Alert>
