@@ -78,7 +78,7 @@ export const AllUsersPage = () => {
       method: 'DELETE',
       headers: { Accept: 'application/json' },
     });
-    if (response.ok === true) {
+    if (response.ok === true) {             
       updateUser();
     }
   }
@@ -87,12 +87,12 @@ export const AllUsersPage = () => {
 
   let newMenuAll = [];
   if (menu.length) {
-    menu.map((item) => {
-      let newMenu = [];
-      newMenu.push(item.name);
-      newMenu.push(item.cost);
-      newMenu.push(item.measure);
-      newMenuAll.push(newMenu);
+    menu.map((item) => {      
+        let newMenu = [];
+        newMenu.push(item.name);
+        newMenu.push(item.cost);
+        newMenu.push(item.measure);
+        return ( newMenuAll.push(newMenu) )     
     });
   }
 

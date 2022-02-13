@@ -70,15 +70,9 @@ export const UserMenuPage = () => {
     setName(n);
   };
 
-  const changeHandler = (event) => {
-    console.log(event.target.id);
-    console.log(event.target.value);
+  const changeHandler = (event) => {    
     arr[event.target.id] = event.target.value;
-
-    setQuantity(arr.map(Number));
-
-    console.log(arr);
-    console.log(quantity);
+    setQuantity(arr.map(Number));    
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -164,7 +158,7 @@ export const UserMenuPage = () => {
                     {product.measure}
                   </StyledTableCell>
                   <StyledTableCell align='center'>
-                    <img src={`http://localhost:3000/${product.image}`} />
+                    <img src={`http://localhost:3000/${product.image}`} alt="dish" />
                   </StyledTableCell>
                   <StyledTableCell align='right'>
                     <TextField

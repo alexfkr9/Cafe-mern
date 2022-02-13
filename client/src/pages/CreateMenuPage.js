@@ -109,26 +109,24 @@ export const CreateMenuPage = () => {
   function Save() {
     if (form._id === 0) {
       submitUser();
-    } else {
+    } else { console.log('EditUser')
       EditUser();
     }
   }
 
   // Отправка файла
   const [selectedFile, setSelectedFile] = useState();
-  const [fileName, setFileName] = useState('');
   const [isSelected, setIsSelected] = useState(false);
 
   const saveFile = (event) => {
-    setSelectedFile(event.target.files[0]);
-    setFileName(event.target.files[0].name);
+    setSelectedFile(event.target.files[0]); 
     setIsSelected(true);
   };
 
   const submitUser = () => {
     const formData = new FormData();
     formData.append('file', selectedFile);
-    formData.append('form', JSON.stringify(form));
+    formData.append('form', JSON.stringify(form));   
 
     fetch('/api/menu', {
       method: 'POST',
@@ -281,7 +279,7 @@ export const CreateMenuPage = () => {
                     {product.measure}
                   </StyledTableCell>
                   <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
-                    <img src={`http://localhost:3000/${product.image}`} />
+                    <img src={`http://localhost:3000/${product.image}`} alt="dish" />
                   </StyledTableCell>
                   <StyledTableCell align='center'>
                     <Button
