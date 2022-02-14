@@ -25,7 +25,7 @@ export const CreateMenuPage = () => {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
-  const [form, setForm] = useState({ _id: 0 });
+  const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
 
   useEffect(() => {
     fetch('/api/menu')
@@ -109,7 +109,8 @@ export const CreateMenuPage = () => {
   function Save() {
     if (form._id === 0) {
       submitUser();
-    } else { console.log('EditUser')
+    } else {
+      console.log('EditUser');
       EditUser();
     }
   }
@@ -119,14 +120,14 @@ export const CreateMenuPage = () => {
   const [isSelected, setIsSelected] = useState(false);
 
   const saveFile = (event) => {
-    setSelectedFile(event.target.files[0]); 
+    setSelectedFile(event.target.files[0]);
     setIsSelected(true);
   };
 
   const submitUser = () => {
     const formData = new FormData();
     formData.append('file', selectedFile);
-    formData.append('form', JSON.stringify(form));   
+    formData.append('form', JSON.stringify(form));
 
     fetch('/api/menu', {
       method: 'POST',
@@ -279,7 +280,10 @@ export const CreateMenuPage = () => {
                     {product.measure}
                   </StyledTableCell>
                   <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
-                    <img src={`http://localhost:3000/${product.image}`} alt="dish" />
+                    <img
+                      src={`http://localhost:3000/${product.image}`}
+                      alt='dish'
+                    />
                   </StyledTableCell>
                   <StyledTableCell align='center'>
                     <Button
