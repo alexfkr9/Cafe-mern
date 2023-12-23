@@ -21,7 +21,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const uri = process.env.MONGODB_URI;
-const PORT = process.env.PORT || 5000;
+// const PORT = process.env.PORT || 5000;
+const PORT = 'https://cafe-mern.onrender.com';
 
 const db =
   'mongodb+srv://san:gabuzovg@cluster0.uksn7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
