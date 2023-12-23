@@ -4,12 +4,7 @@
   "description": "Cafe Mern stack",
   "main": "app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node app.js",
-    "server": "nodemon server --ignore client",
-    "client": "npm run start --prefix client",
-    "client:install": "npm install --prefix client",
-    "client:build": "npm run build --prefix client",
-    "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
+    "start": "cross-env NODE_ENV=production node app.js"
   },
   "keywords": [
     "mern",
