@@ -1,37 +1,37 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { makeStyles } from '@mui/styles';
+// import { makeStyles } from '@mui/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles(() => ({
-  navlinks: {
-    marginLeft: '20px',
-    display: 'flex',
-  },
-  logo: {
-    flexGrow: '1',
-    // cursor: "pointer",
-  },
-  link: {
-    textDecoration: 'none',
-    color: 'white',
-    fontSize: '20px',
-    marginLeft: '20px',
-    '&:hover': {
-      color: 'yellow',
-    },
-  },
-  selected: {
-    color: 'yellow',
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   navlinks: {
+//     marginLeft: '20px',
+//     display: 'flex',
+//   },
+//   logo: {
+//     flexGrow: '1',
+//     // cursor: "pointer",
+//   },
+//   link: {
+//     textDecoration: 'none',
+//     color: 'white',
+//     fontSize: '20px',
+//     marginLeft: '20px',
+//     '&:hover': {
+//       color: 'yellow',
+//     },
+//   },
+//   selected: {
+//     color: 'yellow',
+//   },
+// }));
 
 export const Navbar = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <Box sx={{ flexGrow: 1 }}>

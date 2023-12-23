@@ -11,7 +11,7 @@ import {
   TableBody,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow
 } from '@mui/material';
 
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -62,7 +62,7 @@ export const CreateMenuPage = () => {
   async function GetUser(id) {
     const response = await fetch('/api/menu/' + id, {
       method: 'GET',
-      headers: { Accept: 'application/json' },
+      headers: { Accept: 'application/json' }
     });
     if (response.ok === true) {
       const user = await response.json();
@@ -70,7 +70,7 @@ export const CreateMenuPage = () => {
         _id: user._id,
         name: user.name,
         cost: user.cost,
-        measure: user.measure,
+        measure: user.measure
       }));
     }
   }
@@ -81,9 +81,9 @@ export const CreateMenuPage = () => {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form)
     });
     if (response.ok === true) {
       updateUser();
@@ -94,7 +94,7 @@ export const CreateMenuPage = () => {
   async function DeleteUser(id) {
     const response = await fetch('/api/menu/' + id, {
       method: 'DELETE',
-      headers: { Accept: 'application/json' },
+      headers: { Accept: 'application/json' }
     });
     if (response.ok === true) {
       updateUser();
@@ -131,7 +131,7 @@ export const CreateMenuPage = () => {
 
     fetch('/api/menu', {
       method: 'POST',
-      body: formData,
+      body: formData
     })
       .then((response) => response.json())
       .then((result) => {
@@ -147,22 +147,24 @@ export const CreateMenuPage = () => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      color: theme.palette.common.white
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
+      fontSize: 14
+    }
   }));
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     // hide last border
     '&:last-child td, &:last-child th': {
-      border: 0,
-    },
+      border: 0
+    }
   }));
+
+  // return <h1>Create Menu</h1>;
 
   if (error) {
     return <div>Ошибка: {error.message}</div>;
@@ -177,7 +179,7 @@ export const CreateMenuPage = () => {
         <Box
           component='form'
           sx={{
-            '& > :not(style)': { m: 1, width: '30ch' },
+            '& > :not(style)': { m: 1, width: '30ch' }
           }}
           noValidate
           autoComplete='off'
@@ -208,7 +210,7 @@ export const CreateMenuPage = () => {
         {/*  Input dish image  */}
         <Box
           sx={{
-            '& > :not(style)': { mb: 2 },
+            '& > :not(style)': { mb: 2 }
           }}
         >
           <input
