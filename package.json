@@ -4,7 +4,7 @@
   "description": "Cafe Mern stack",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "npm install && node app.js"
   },
   "keywords": [
     "mern",
