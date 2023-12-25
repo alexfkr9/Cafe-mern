@@ -10,16 +10,18 @@ function App() {
   const routes = useRoutes();
 
   return (
-    <h1>Working</h1>
-    // <BrowserRouter>
-    //   <Routes>
-    //     {routes}
+    <>
+      <h1>Working</h1>
+      <BrowserRouter>
+        <Routes>
+          {routes}
 
-    //     {/* <Navbar />
-    //     <div className='container'>{routes}</div>
-    //      */}
-    //   </Routes>
-    // </BrowserRouter>
+          {/* <Navbar />
+        <div className='container'>{routes}</div>
+         */}
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
