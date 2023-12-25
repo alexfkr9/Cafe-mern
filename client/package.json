@@ -33,7 +33,7 @@
       "react-app/jest"
     ]
   },
-  "proxy": "https://cafe-mern.onrender.com",
+  "proxy": "http://localhost:3000",
   "browserslist": {
     "production": [
       ">0.2%",
