@@ -131,7 +131,8 @@ exports.getMenu = async function (req, res) {
   // request to mongo.db
   Menu.find({}, function (err, menus) {
     if (err) return console.log(err);
-    res.send(menus);
+    // res.send(menus);
+    res.json(menus);
   });
 
   // const content = await fs.readFileSync(menuLocDB,"utf8");
