@@ -44,7 +44,7 @@ export const CreateMenuPage = () => {
 
   function getData() {
     console.log('getData');
-    fetch('/api/menu')
+    fetch('https://cafe-mern.onrender.com/api/menu')
       // .then((res) => res.json())
       .then((res) => {
         console.log(res);
