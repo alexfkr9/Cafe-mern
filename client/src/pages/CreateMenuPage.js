@@ -46,17 +46,20 @@ export const CreateMenuPage = () => {
     console.log('getData');
     fetch('https://cafe-mern.onrender.com/api/menu')
       // .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        // res.json();
-        console.log(res.json());
-      })
       .then(
-        (result) => {
-          console.log(result);
+        (res) => {
+          console.log(res);
+          // res.json();
           setIsLoaded(true);
-          setMenu(result);
+          setMenu(res.json());
+          console.log(res.json());
         },
+        // .then(
+        //   (result) => {
+        //     console.log(result);
+        //     setIsLoaded(true);
+        //     setMenu(result);
+        //   },
         (error) => {
           console.log(error);
           setIsLoaded(true);
@@ -64,6 +67,8 @@ export const CreateMenuPage = () => {
         }
       );
   }
+
+  console.log(menu);
 
   // Update
   function updateUser() {
