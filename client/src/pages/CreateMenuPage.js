@@ -27,41 +27,31 @@ export const CreateMenuPage = () => {
   const [menu, setMenu] = useState([]);
   const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
 
-  // useEffect(() => {
-  //   fetch('/api/menu')
-  //     .then((res) => res.json())
-  //     .then(
-  //       (result) => {
-  //         setIsLoaded(true);
-  //         setMenu(result);
-  //       },
-  //       (error) => {
-  //         setIsLoaded(true);
-  //         setError(error);
-  //       }
-  //     );
-  // }, []);
+  useEffect(() => {
+    fetch('https://cafe-mern.onrender.com/api/menu')
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setMenu(result);
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      );
+  }, []);
 
   function getData() {
     console.log('getData');
     fetch('https://cafe-mern.onrender.com/api/menu')
-      // .then((res) => res.json())
+      .then((res) => res.json())
       .then(
-        (res) => {
-          console.log(res);
-          // res.json();
+        (result) => {
           setIsLoaded(true);
-          setMenu(Promise.resolve(res.json()));
-          console.log(Promise.resolve(res.json()));
+          setMenu(result);
         },
-        // .then(
-        //   (result) => {
-        //     console.log(result);
-        //     setIsLoaded(true);
-        //     setMenu(result);
-        //   },
         (error) => {
-          console.log(error);
           setIsLoaded(true);
           setError(error);
         }
