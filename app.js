@@ -1,7 +1,14 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 app.use(express.json());
+
+// middleware
+const corsOptions = {
+  origin: 'https://cafe-mern-front.onrender.com' // frontend URI (ReactJS)
+};
+app.use(cors(corsOptions));
 
 require('dotenv').config();
 
