@@ -48,7 +48,8 @@ export const CreateMenuPage = () => {
       // .then((res) => res.json())
       .then((res) => {
         console.log(res);
-        res.json();
+        // res.json();
+        console.log(res.json());
       })
       .then(
         (result) => {
