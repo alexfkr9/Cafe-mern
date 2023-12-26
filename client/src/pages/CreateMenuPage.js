@@ -309,7 +309,7 @@ export const CreateMenuPage = () => {
                 </StyledTableCell>
                 <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
                   <img
-                    src={`http://localhost:3000/${product.image}`}
+                    src={`https://cafe-mern.onrender.com/${product.image}`}
                     alt='dish'
                   />
                 </StyledTableCell>
