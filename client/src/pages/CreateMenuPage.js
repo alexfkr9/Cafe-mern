@@ -27,20 +27,20 @@ export const CreateMenuPage = () => {
   const [menu, setMenu] = useState([]);
   const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
 
-  useEffect(() => {
-    fetch('/api/menu')
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setMenu(result);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
-  }, []);
+  // useEffect(() => {
+  //   fetch('/api/menu')
+  //     .then((res) => res.json())
+  //     .then(
+  //       (result) => {
+  //         setIsLoaded(true);
+  //         setMenu(result);
+  //       },
+  //       (error) => {
+  //         setIsLoaded(true);
+  //         setError(error);
+  //       }
+  //     );
+  // }, []);
 
   // Update
   function updateUser() {
@@ -166,156 +166,154 @@ export const CreateMenuPage = () => {
 
   // return <h1>Create Menu</h1>;
 
-  if (error) {
-    return <div>Ошибка: {error.message}</div>;
-  } else if (!isLoaded) {
-    return <Loader />;
-  } else {
-    return (
-      <>
-        <h2>Создать меню</h2>
+  // if (error) {
+  //   return <div>Ошибка: {error.message}</div>;
+  // } else if (!isLoaded) {
+  //   return <Loader />;
+  // } else {
+  return (
+    <>
+      <h2>Создать меню</h2>
 
-        {/*  Input dish data  */}
-        <Box
-          component='form'
-          sx={{
-            '& > :not(style)': { m: 1, width: '30ch' }
-          }}
-          noValidate
-          autoComplete='off'
-        >
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Название:'
-            name='name'
-            value={form.name}
-            onChange={changeHandler}
-          />
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Цена:'
-            name='cost'
-            value={form.cost}
-            onChange={changeHandler}
-          />
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Ед.изм:'
-            name='measure'
-            value={form.measure}
-            onChange={changeHandler}
-          />
-        </Box>
+      {/*  Input dish data  */}
+      <Box
+        component='form'
+        sx={{
+          '& > :not(style)': { m: 1, width: '30ch' }
+        }}
+        noValidate
+        autoComplete='off'
+      >
+        <TextField
+          InputLabelProps={{ shrink: true }}
+          label='Название:'
+          name='name'
+          value={form.name}
+          onChange={changeHandler}
+        />
+        <TextField
+          InputLabelProps={{ shrink: true }}
+          label='Цена:'
+          name='cost'
+          value={form.cost}
+          onChange={changeHandler}
+        />
+        <TextField
+          InputLabelProps={{ shrink: true }}
+          label='Ед.изм:'
+          name='measure'
+          value={form.measure}
+          onChange={changeHandler}
+        />
+      </Box>
 
-        {/*  Input dish image  */}
-        <Box
-          sx={{
-            '& > :not(style)': { mb: 2 }
-          }}
-        >
-          <input
-            accept='image/*'
-            onChange={saveFile}
-            style={{ display: 'none' }}
-            id='raised-button-file'
-            multiple
-            type='file'
-          />
-          <label htmlFor='raised-button-file'>
-            <Button size='small' variant='contained' component='span'>
-              Upload
-            </Button>
-          </label>
-
-          {/* Dish image data */}
-          {isSelected ? (
-            <div>
-              <p>Filename: {selectedFile.name}</p>
-              <p>Filetype: {selectedFile.type}</p>
-              <p>Size in bytes: {selectedFile.size}</p>
-              <p>
-                lastModifiedDate:{' '}
-                {selectedFile.lastModifiedDate.toLocaleDateString()}
-              </p>
-            </div>
-          ) : (
-            <p>Choose a picture of a dish</p>
-          )}
-
-          {/*  Save dish data  */}
-          <Button variant='contained' color='success' onClick={Save}>
-            Сохранить
+      {/*  Input dish image  */}
+      <Box
+        sx={{
+          '& > :not(style)': { mb: 2 }
+        }}
+      >
+        <input
+          accept='image/*'
+          onChange={saveFile}
+          style={{ display: 'none' }}
+          id='raised-button-file'
+          multiple
+          type='file'
+        />
+        <label htmlFor='raised-button-file'>
+          <Button size='small' variant='contained' component='span'>
+            Upload
           </Button>
-        </Box>
+        </label>
 
-        {/*  Menu table  */}
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: '#cceeff' }}>
-                <TableCell sx={{ fontWeight: 'bold' }}>Название</TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                  Цена
-                </TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                  Ед.изм
-                </TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                  Picture
-                </TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                  Edit
-                </TableCell>
-                <TableCell align='right' sx={{ fontWeight: 'bold' }}>
-                  Delete
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {menu.map((product, id) => (
-                <StyledTableRow key={product._id}>
-                  <StyledTableCell>{product.name}</StyledTableCell>
-                  <StyledTableCell align='center'>
-                    {product.cost}
-                  </StyledTableCell>
-                  <StyledTableCell align='center'>
-                    {product.measure}
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
-                    <img
-                      src={`http://localhost:3000/${product.image}`}
-                      alt='dish'
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell align='center'>
-                    <Button
-                      size='small'
-                      variant='contained'
-                      color='secondary'
-                      key={product.id}
-                      onClick={() => GetUser(product._id)}
-                    >
-                      Edit
-                    </Button>
-                  </StyledTableCell>
-                  <StyledTableCell align='right'>
-                    <IconButton
-                      edge='end'
-                      aria-label='delete'
-                      variant='contained'
-                      color='error'
-                      key={product.id}
-                      onClick={() => DeleteUser(product._id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </>
-    );
-  }
+        {/* Dish image data */}
+        {isSelected ? (
+          <div>
+            <p>Filename: {selectedFile.name}</p>
+            <p>Filetype: {selectedFile.type}</p>
+            <p>Size in bytes: {selectedFile.size}</p>
+            <p>
+              lastModifiedDate:{' '}
+              {selectedFile.lastModifiedDate.toLocaleDateString()}
+            </p>
+          </div>
+        ) : (
+          <p>Choose a picture of a dish</p>
+        )}
+
+        {/*  Save dish data  */}
+        <Button variant='contained' color='success' onClick={Save}>
+          Сохранить
+        </Button>
+      </Box>
+
+      {/*  Menu table  */}
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: '#cceeff' }}>
+              <TableCell sx={{ fontWeight: 'bold' }}>Название</TableCell>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                Цена
+              </TableCell>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                Ед.изм
+              </TableCell>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                Picture
+              </TableCell>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                Edit
+              </TableCell>
+              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                Delete
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {menu.map((product, id) => (
+              <StyledTableRow key={product._id}>
+                <StyledTableCell>{product.name}</StyledTableCell>
+                <StyledTableCell align='center'>{product.cost}</StyledTableCell>
+                <StyledTableCell align='center'>
+                  {product.measure}
+                </StyledTableCell>
+                <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
+                  <img
+                    src={`http://localhost:3000/${product.image}`}
+                    alt='dish'
+                  />
+                </StyledTableCell>
+                <StyledTableCell align='center'>
+                  <Button
+                    size='small'
+                    variant='contained'
+                    color='secondary'
+                    key={product.id}
+                    onClick={() => GetUser(product._id)}
+                  >
+                    Edit
+                  </Button>
+                </StyledTableCell>
+                <StyledTableCell align='right'>
+                  <IconButton
+                    edge='end'
+                    aria-label='delete'
+                    variant='contained'
+                    color='error'
+                    key={product.id}
+                    onClick={() => DeleteUser(product._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+  // }
 };
