@@ -45,7 +45,11 @@ export const CreateMenuPage = () => {
   function getData() {
     console.log('getData');
     fetch('/api/menu')
-      .then((res) => res.json())
+      // .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        res.json();
+      })
       .then(
         (result) => {
           console.log(result);
@@ -53,6 +57,7 @@ export const CreateMenuPage = () => {
           setMenu(result);
         },
         (error) => {
+          console.log(error);
           setIsLoaded(true);
           setError(error);
         }
