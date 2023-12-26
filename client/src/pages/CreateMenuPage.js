@@ -51,8 +51,8 @@ export const CreateMenuPage = () => {
           console.log(res);
           // res.json();
           setIsLoaded(true);
-          setMenu(res.json());
-          console.log(res.json());
+          setMenu(Promise.resolve(res.json()));
+          console.log(Promise.resolve(res.json()));
         },
         // .then(
         //   (result) => {
