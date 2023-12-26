@@ -42,6 +42,23 @@ export const CreateMenuPage = () => {
   //     );
   // }, []);
 
+  function getData() {
+    console.log('getData');
+    fetch('/api/menu')
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          setIsLoaded(true);
+          setMenu(result);
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      );
+  }
+
   // Update
   function updateUser() {
     fetch('/api/menu')
@@ -174,6 +191,16 @@ export const CreateMenuPage = () => {
   return (
     <>
       <h2>Создать меню</h2>
+
+      <Button
+        size='small'
+        variant='contained'
+        component='span'
+        onClick={getData}
+      >
+        Get Data
+      </Button>
+      <p />
 
       {/*  Input dish data  */}
       <Box
