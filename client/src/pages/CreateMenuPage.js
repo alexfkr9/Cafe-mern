@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import { apiUrl } from '../api/constants';
+
 import { Loader } from '../components/Loader';
 
 import {
@@ -27,8 +29,12 @@ export const CreateMenuPage = () => {
   const [menu, setMenu] = useState([]);
   const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
 
+  console.log(apiUrl);
+
   useEffect(() => {
-    fetch('https://cafe-mern.onrender.com/api/menu')
+    fetch(`${apiUrl}/api/menu`)
+      // fetch('/api/menu')
+      // fetch('https://cafe-mern.onrender.com/api/menu')
       .then((res) => res.json())
       .then(
         (result) => {
@@ -44,7 +50,9 @@ export const CreateMenuPage = () => {
 
   function getData() {
     console.log('getData');
-    fetch('https://cafe-mern.onrender.com/api/menu')
+    fetch(`${apiUrl}/api/menu`)
+      // fetch('/api/menu')
+      // fetch('https://cafe-mern.onrender.com/api/menu')
       .then((res) => res.json())
       .then(
         (result) => {
@@ -59,6 +67,8 @@ export const CreateMenuPage = () => {
   }
 
   console.log(menu);
+
+  console.log(process.env.NODE_ENV);
 
   // Update
   function updateUser() {
@@ -308,10 +318,7 @@ export const CreateMenuPage = () => {
                   {product.measure}
                 </StyledTableCell>
                 <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
-                  <img
-                    src={`https://cafe-mern.onrender.com/${product.image}`}
-                    alt='dish'
-                  />
+                  <img src={`${apiUrl}/${product.image}`} alt='dish' />
                 </StyledTableCell>
                 <StyledTableCell align='center'>
                   <Button
