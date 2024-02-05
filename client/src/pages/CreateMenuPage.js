@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import { apiUrl } from '../api/constants';
+
 import { Loader } from '../components/Loader';
 
 import {
@@ -11,7 +13,7 @@ import {
   TableBody,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow
 } from '@mui/material';
 
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -27,8 +29,12 @@ export const CreateMenuPage = () => {
   const [menu, setMenu] = useState([]);
   const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
 
+  console.log(apiUrl);
+
   useEffect(() => {
-    fetch('/api/menu')
+    fetch(`${apiUrl}/api/menu`)
+      // fetch('/api/menu')
+      // fetch('https://cafe-mern.onrender.com/api/menu')
       .then((res) => res.json())
       .then(
         (result) => {
@@ -41,6 +47,28 @@ export const CreateMenuPage = () => {
         }
       );
   }, []);
+
+  function getData() {
+    console.log('getData');
+    fetch(`${apiUrl}/api/menu`)
+      // fetch('/api/menu')
+      // fetch('https://cafe-mern.onrender.com/api/menu')
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setMenu(result);
+        },
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      );
+  }
+
+  console.log(menu);
+
+  console.log(process.env.NODE_ENV);
 
   // Update
   function updateUser() {
@@ -62,7 +90,7 @@ export const CreateMenuPage = () => {
   async function GetUser(id) {
     const response = await fetch('/api/menu/' + id, {
       method: 'GET',
-      headers: { Accept: 'application/json' },
+      headers: { Accept: 'application/json' }
     });
     if (response.ok === true) {
       const user = await response.json();
@@ -70,7 +98,7 @@ export const CreateMenuPage = () => {
         _id: user._id,
         name: user.name,
         cost: user.cost,
-        measure: user.measure,
+        measure: user.measure
       }));
     }
   }
@@ -81,9 +109,9 @@ export const CreateMenuPage = () => {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(form)
     });
     if (response.ok === true) {
       updateUser();
@@ -94,7 +122,7 @@ export const CreateMenuPage = () => {
   async function DeleteUser(id) {
     const response = await fetch('/api/menu/' + id, {
       method: 'DELETE',
-      headers: { Accept: 'application/json' },
+      headers: { Accept: 'application/json' }
     });
     if (response.ok === true) {
       updateUser();
@@ -131,7 +159,7 @@ export const CreateMenuPage = () => {
 
     fetch('/api/menu', {
       method: 'POST',
-      body: formData,
+      body: formData
     })
       .then((response) => response.json())
       .then((result) => {
@@ -147,173 +175,180 @@ export const CreateMenuPage = () => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      color: theme.palette.common.white
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
+      fontSize: 14
+    }
   }));
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     // hide last border
     '&:last-child td, &:last-child th': {
-      border: 0,
-    },
+      border: 0
+    }
   }));
 
-  if (error) {
-    return <div>Ошибка: {error.message}</div>;
-  } else if (!isLoaded) {
-    return <Loader />;
-  } else {
-    return (
-      <>
-        <h2>Создать меню</h2>
+  // return <h1>Create Menu</h1>;
 
-        {/*  Input dish data  */}
-        <Box
-          component='form'
-          sx={{
-            '& > :not(style)': { m: 1, width: '30ch' },
-          }}
-          noValidate
-          autoComplete='off'
-        >
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Название:'
-            name='name'
-            value={form.name}
-            onChange={changeHandler}
-          />
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Цена:'
-            name='cost'
-            value={form.cost}
-            onChange={changeHandler}
-          />
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Ед.изм:'
-            name='measure'
-            value={form.measure}
-            onChange={changeHandler}
-          />
-        </Box>
+  // if (error) {
+  //   return <div>Ошибка: {error.message}</div>;
+  // } else if (!isLoaded) {
+  //   return <Loader />;
+  // } else {
+  return (
+    <>
+      <h2>Создать меню</h2>
 
-        {/*  Input dish image  */}
-        <Box
-          sx={{
-            '& > :not(style)': { mb: 2 },
-          }}
-        >
-          <input
-            accept='image/*'
-            onChange={saveFile}
-            style={{ display: 'none' }}
-            id='raised-button-file'
-            multiple
-            type='file'
-          />
-          <label htmlFor='raised-button-file'>
-            <Button size='small' variant='contained' component='span'>
-              Upload
-            </Button>
-          </label>
+      <Button
+        size='small'
+        variant='contained'
+        component='span'
+        onClick={getData}
+      >
+        Get Data
+      </Button>
+      <p />
 
-          {/* Dish image data */}
-          {isSelected ? (
-            <div>
-              <p>Filename: {selectedFile.name}</p>
-              <p>Filetype: {selectedFile.type}</p>
-              <p>Size in bytes: {selectedFile.size}</p>
-              <p>
-                lastModifiedDate:{' '}
-                {selectedFile.lastModifiedDate.toLocaleDateString()}
-              </p>
-            </div>
-          ) : (
-            <p>Choose a picture of a dish</p>
-          )}
+      {/*  Input dish data  */}
+      <Box
+        component='form'
+        sx={{
+          '& > :not(style)': { m: 1, width: '30ch' }
+        }}
+        noValidate
+        autoComplete='off'
+      >
+        <TextField
+          InputLabelProps={{ shrink: true }}
+          label='Название:'
+          name='name'
+          value={form.name}
+          onChange={changeHandler}
+        />
+        <TextField
+          InputLabelProps={{ shrink: true }}
+          label='Цена:'
+          name='cost'
+          value={form.cost}
+          onChange={changeHandler}
+        />
+        <TextField
+          InputLabelProps={{ shrink: true }}
+          label='Ед.изм:'
+          name='measure'
+          value={form.measure}
+          onChange={changeHandler}
+        />
+      </Box>
 
-          {/*  Save dish data  */}
-          <Button variant='contained' color='success' onClick={Save}>
-            Сохранить
+      {/*  Input dish image  */}
+      <Box
+        sx={{
+          '& > :not(style)': { mb: 2 }
+        }}
+      >
+        <input
+          accept='image/*'
+          onChange={saveFile}
+          style={{ display: 'none' }}
+          id='raised-button-file'
+          multiple
+          type='file'
+        />
+        <label htmlFor='raised-button-file'>
+          <Button size='small' variant='contained' component='span'>
+            Upload
           </Button>
-        </Box>
+        </label>
 
-        {/*  Menu table  */}
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: '#cceeff' }}>
-                <TableCell sx={{ fontWeight: 'bold' }}>Название</TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                  Цена
-                </TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                  Ед.изм
-                </TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                  Picture
-                </TableCell>
-                <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                  Edit
-                </TableCell>
-                <TableCell align='right' sx={{ fontWeight: 'bold' }}>
-                  Delete
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {menu.map((product, id) => (
-                <StyledTableRow key={product._id}>
-                  <StyledTableCell>{product.name}</StyledTableCell>
-                  <StyledTableCell align='center'>
-                    {product.cost}
-                  </StyledTableCell>
-                  <StyledTableCell align='center'>
-                    {product.measure}
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
-                    <img
-                      src={`http://localhost:3000/${product.image}`}
-                      alt='dish'
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell align='center'>
-                    <Button
-                      size='small'
-                      variant='contained'
-                      color='secondary'
-                      key={product.id}
-                      onClick={() => GetUser(product._id)}
-                    >
-                      Edit
-                    </Button>
-                  </StyledTableCell>
-                  <StyledTableCell align='right'>
-                    <IconButton
-                      edge='end'
-                      aria-label='delete'
-                      variant='contained'
-                      color='error'
-                      key={product.id}
-                      onClick={() => DeleteUser(product._id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </>
-    );
-  }
+        {/* Dish image data */}
+        {isSelected ? (
+          <div>
+            <p>Filename: {selectedFile.name}</p>
+            <p>Filetype: {selectedFile.type}</p>
+            <p>Size in bytes: {selectedFile.size}</p>
+            <p>
+              lastModifiedDate:{' '}
+              {selectedFile.lastModifiedDate.toLocaleDateString()}
+            </p>
+          </div>
+        ) : (
+          <p>Choose a picture of a dish</p>
+        )}
+
+        {/*  Save dish data  */}
+        <Button variant='contained' color='success' onClick={Save}>
+          Сохранить
+        </Button>
+      </Box>
+
+      {/*  Menu table  */}
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: '#cceeff' }}>
+              <TableCell sx={{ fontWeight: 'bold' }}>Название</TableCell>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                Цена
+              </TableCell>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                Ед.изм
+              </TableCell>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                Picture
+              </TableCell>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                Edit
+              </TableCell>
+              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                Delete
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {menu.map((product, id) => (
+              <StyledTableRow key={product._id}>
+                <StyledTableCell>{product.name}</StyledTableCell>
+                <StyledTableCell align='center'>{product.cost}</StyledTableCell>
+                <StyledTableCell align='center'>
+                  {product.measure}
+                </StyledTableCell>
+                <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
+                  <img src={`${apiUrl}/${product.image}`} alt='dish' />
+                </StyledTableCell>
+                <StyledTableCell align='center'>
+                  <Button
+                    size='small'
+                    variant='contained'
+                    color='secondary'
+                    key={product.id}
+                    onClick={() => GetUser(product._id)}
+                  >
+                    Edit
+                  </Button>
+                </StyledTableCell>
+                <StyledTableCell align='right'>
+                  <IconButton
+                    edge='end'
+                    aria-label='delete'
+                    variant='contained'
+                    color='error'
+                    key={product.id}
+                    onClick={() => DeleteUser(product._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+  // }
 };

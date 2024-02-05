@@ -1,4 +1,3 @@
-
 const multer = require('multer'); // get file
 
 // Accessing the path module
@@ -133,6 +132,7 @@ exports.getMenu = async function (req, res) {
   Menu.find({}, function (err, menus) {
     if (err) return console.log(err);
     res.send(menus);
+    // res.json(menus);
   });
 
   // const content = await fs.readFileSync(menuLocDB,"utf8");
@@ -184,11 +184,10 @@ exports.createMenu = async (req, res) => {
   const form = JSON.parse(req.body.form);
 
   let fileExt = path.parse(req.file.originalname).ext;
-  let editFileName = reqPath + 'public/image/' + form.name + fileExt; 
-  
-  
+  let editFileName = reqPath + 'public/image/' + form.name + fileExt;
+
   // edit menu's photo
-  sharp.crop(req, editFileName);  
+  sharp.crop(req, editFileName);
 
   // const menu =    {
   //                     _id: (Math.random() + 1).toString(36).substring(7),
@@ -215,7 +214,7 @@ exports.createMenu = async (req, res) => {
     name: form.name,
     cost: form.cost,
     measure: form.measure,
-    image: form.name + fileExt,
+    image: form.name + fileExt
   };
 
   const menu = new Menu(menuObj);
@@ -288,7 +287,7 @@ exports.editMenuById = async function (req, res) {
   const newMenu = {
     name: req.body.name,
     cost: req.body.cost,
-    measure: req.body.measure,
+    measure: req.body.measure
   };
 
   Menu.findOneAndUpdate(
