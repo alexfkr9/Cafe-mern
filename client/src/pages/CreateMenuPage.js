@@ -29,7 +29,7 @@ export const CreateMenuPage = () => {
   const [menu, setMenu] = useState([]);
   const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
 
-  console.log(apiUrl);
+  console.log('Url - ' + apiUrl);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/menu`)
