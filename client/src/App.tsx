@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRoutes } from './routes';
+import { useRoutes } from './routes/routes';
 import { Navbar } from './components/Navbar';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -7,19 +7,15 @@ import { AllUsersPage } from './pages/AllUsersPage';
 import { CreateMenuPage } from './pages/CreateMenuPage';
 
 function App() {
-  const routes = useRoutes();
+  const Routes = useRoutes;
 
   return (
     <>
-      <h1>Working</h1>
       <BrowserRouter>
-        <Routes>
-          {routes}
-
-          {/* <Navbar />
-        <div className='container'>{routes}</div>
-         */}
-        </Routes>
+        <div className='container'>
+          <Navbar />
+        </div>
+        <Routes />
       </BrowserRouter>
     </>
   );
