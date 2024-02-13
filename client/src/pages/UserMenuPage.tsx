@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import { apiUrl } from '../api/constants';
+
 import { Loader } from '../components/Loader';
 
 import Snack from '../components/Snack';
@@ -12,7 +14,7 @@ import {
   TableBody,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow
 } from '@mui/material';
 
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -21,17 +23,17 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 
 export const UserMenuPage = () => {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState([]);
-  const [arr, setArr] = useState([]);
+  const [arr, setArr] = useState<any>([]);
   const [isSnackOpen, setSnackOpen] = useState(false);
   const [isDisable, setDisable] = useState(false);
 
   useEffect(() => {
-    fetch('/api/menu')
+    fetch(`${apiUrl}/api/menu`)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -48,16 +50,16 @@ export const UserMenuPage = () => {
 
   // Добавление пользователя
   async function CreateUser() {
-    const response = await fetch('api/user', {
+    const response = await fetch(`${apiUrl}/api/user`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         name: name || (Math.random() + 1).toString(36).substring(7),
-        quantity: quantity,
-      }),
+        quantity: quantity
+      })
     });
     if (response.ok === true) {
       setDisable(true);
@@ -65,34 +67,36 @@ export const UserMenuPage = () => {
     }
   }
 
-  const getName = (event) => {
+  const getName = (event: { target: { value: any } }) => {
     const n = event.target.value;
     setName(n);
   };
 
-  const changeHandler = (event) => {    
+  const changeHandler = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     arr[event.target.id] = event.target.value;
-    setQuantity(arr.map(Number));    
+    setQuantity(arr.map(Number));
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      color: theme.palette.common.white
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
+      fontSize: 14
+    }
   }));
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     // hide last border
     '&:last-child td, &:last-child th': {
-      border: 0,
-    },
+      border: 0
+    }
   }));
 
   if (error) {
@@ -106,7 +110,7 @@ export const UserMenuPage = () => {
         <Box
           component='form'
           sx={{
-            '& > :not(style)': { m: 1, width: '30ch' },
+            '& > :not(style)': { m: 1, width: '30ch' }
           }}
           noValidate
           autoComplete='off'
@@ -148,7 +152,7 @@ export const UserMenuPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {menu.map((product, index) => (
+              {menu.map((product: any, index) => (
                 <StyledTableRow key={product._id}>
                   <StyledTableCell>{product.name}</StyledTableCell>
                   <StyledTableCell align='center'>
@@ -158,12 +162,15 @@ export const UserMenuPage = () => {
                     {product.measure}
                   </StyledTableCell>
                   <StyledTableCell align='center'>
-                    <img src={`http://localhost:3000/${product.image}`} alt="dish" />
+                    <img
+                      src={`http://localhost:3000/${product.image}`}
+                      alt='dish'
+                    />
                   </StyledTableCell>
                   <StyledTableCell align='right'>
                     <TextField
                       sx={{
-                        maxWidth: '70px',
+                        maxWidth: '70px'
                       }}
                       size='small'
                       name='quantity'

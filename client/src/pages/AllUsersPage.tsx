@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
+import { apiUrl } from '../api/constants';
+
 import { Loader } from '../components/Loader';
 
+import { IconButton } from '@mui/material';
+
 import {
-  IconButton,
   Paper,
   Table,
   TableBody,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow
 } from '@mui/material';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,13 +24,13 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 
 export const AllUsersPage = () => {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<any>([]);
 
   useEffect(() => {
-    fetch('/api/menu')
+    fetch(`${apiUrl}/api/menu`)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -42,7 +45,7 @@ export const AllUsersPage = () => {
   }, []);
 
   useEffect(() => {
-    fetch('/api/user')
+    fetch(`${apiUrl}/api/user`)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -58,7 +61,7 @@ export const AllUsersPage = () => {
   }, []);
 
   function updateUser() {
-    fetch('/api/user')
+    fetch(`${apiUrl}/api/user`)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -73,26 +76,26 @@ export const AllUsersPage = () => {
   }
 
   // Delete User
-  async function DeleteUser(id) {
-    const response = await fetch('/api/user/' + id, {
+  async function DeleteUser(id: string) {
+    const response = await fetch(`${apiUrl}/api/user` + id, {
       method: 'DELETE',
-      headers: { Accept: 'application/json' },
+      headers: { Accept: 'application/json' }
     });
-    if (response.ok === true) {             
+    if (response.ok === true) {
       updateUser();
     }
   }
 
   // Create array for joint table
 
-  let newMenuAll = [];
+  let newMenuAll: any[] = [];
   if (menu.length) {
-    menu.map((item) => {      
-        let newMenu = [];
-        newMenu.push(item.name);
-        newMenu.push(item.cost);
-        newMenu.push(item.measure);
-        return ( newMenuAll.push(newMenu) )     
+    menu.map((item: any) => {
+      let newMenu = [];
+      newMenu.push(item.name);
+      newMenu.push(item.cost);
+      newMenu.push(item.measure);
+      return newMenuAll.push(newMenu);
     });
   }
 
@@ -101,10 +104,10 @@ export const AllUsersPage = () => {
     let oderLenght = users[0].quantity.length;
 
     for (let i = 0; i < oderLenght; i++) {
-      let newArray = [];
-      users.map((user) => {
+      let newArray: any[] = [];
+      users.map((user: { quantity: any[] }) => {
         return newArray.push(user.quantity[i]);
-      });      
+      });
       newArray.map(Number);
       finalArray.push(newArray.map(Number));
     }
@@ -126,21 +129,21 @@ export const AllUsersPage = () => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      color: theme.palette.common.white
     },
     [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
+      fontSize: 14
+    }
   }));
 
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action.hover
     },
     // hide last border
     '&:last-child td, &:last-child th': {
-      border: 0,
-    },
+      border: 0
+    }
   }));
 
   if (error) {
@@ -163,13 +166,12 @@ export const AllUsersPage = () => {
                   <TableCell align='center' sx={{ fontWeight: 'bold' }}>
                     Measure
                   </TableCell>
-                  {users.map((user) => (
+                  {users.map((user: any) => (
                     <TableCell key={user._id} align='center'>
                       Client&nbsp;<b>{user.name}</b>
                       <IconButton
                         edge='end'
                         aria-label='delete'
-                        variant='contained'
                         color='error'
                         key={user._id}
                         onClick={() => DeleteUser(user._id)}

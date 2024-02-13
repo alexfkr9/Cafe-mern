@@ -72,7 +72,7 @@ export const CreateMenuPage = () => {
 
   // Update
   function updateUser() {
-    fetch('/api/menu')
+    fetch(`${apiUrl}/api/menu`)
       .then((res) => res.json())
       .then(
         (result) => {
@@ -87,8 +87,8 @@ export const CreateMenuPage = () => {
   }
 
   // Получение одного пользователя
-  async function GetUser(id) {
-    const response = await fetch('/api/menu/' + id, {
+  async function GetUser(id: string) {
+    const response = await fetch(`${apiUrl}/api/menu` + id, {
       method: 'GET',
       headers: { Accept: 'application/json' }
     });
@@ -105,7 +105,7 @@ export const CreateMenuPage = () => {
 
   // Изменение пользователя
   async function EditUser() {
-    const response = await fetch('/api/menu', {
+    const response = await fetch(`${apiUrl}/api/menu`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -119,8 +119,8 @@ export const CreateMenuPage = () => {
   }
 
   // Удаление пользователя
-  async function DeleteUser(id) {
-    const response = await fetch('/api/menu/' + id, {
+  async function DeleteUser(id: string) {
+    const response = await fetch(`${apiUrl}/api/menu` + id, {
       method: 'DELETE',
       headers: { Accept: 'application/json' }
     });
@@ -129,7 +129,7 @@ export const CreateMenuPage = () => {
     }
   }
 
-  const changeHandler = (e) => {
+  const changeHandler = (e: { target: { name: any; value: any } }) => {
     setForm((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
   };
 
@@ -144,10 +144,12 @@ export const CreateMenuPage = () => {
   }
 
   // Отправка файла
-  const [selectedFile, setSelectedFile] = useState();
+  const [selectedFile, setSelectedFile] = useState<any>();
   const [isSelected, setIsSelected] = useState(false);
 
-  const saveFile = (event) => {
+  const saveFile = (event: {
+    target: { files: React.SetStateAction<undefined>[] };
+  }) => {
     setSelectedFile(event.target.files[0]);
     setIsSelected(true);
   };
@@ -253,7 +255,7 @@ export const CreateMenuPage = () => {
       >
         <input
           accept='image/*'
-          onChange={saveFile}
+          onChange={() => saveFile}
           style={{ display: 'none' }}
           id='raised-button-file'
           multiple
@@ -310,7 +312,7 @@ export const CreateMenuPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {menu.map((product, id) => (
+            {menu.map((product: any, id) => (
               <StyledTableRow key={product._id}>
                 <StyledTableCell>{product.name}</StyledTableCell>
                 <StyledTableCell align='center'>{product.cost}</StyledTableCell>
@@ -335,7 +337,6 @@ export const CreateMenuPage = () => {
                   <IconButton
                     edge='end'
                     aria-label='delete'
-                    variant='contained'
                     color='error'
                     key={product.id}
                     onClick={() => DeleteUser(product._id)}

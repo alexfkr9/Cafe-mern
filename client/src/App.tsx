@@ -1,21 +1,17 @@
 import React from 'react';
-import { useRoutes } from './routes/routes';
+import { GetRoutes } from './routes/GetRoutes';
 import { Navbar } from './components/Navbar';
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AllUsersPage } from './pages/AllUsersPage';
-import { CreateMenuPage } from './pages/CreateMenuPage';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
-  const Routes = useRoutes;
-
   return (
     <>
       <BrowserRouter>
         <div className='container'>
           <Navbar />
         </div>
-        <Routes />
+        <GetRoutes />
       </BrowserRouter>
     </>
   );
