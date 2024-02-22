@@ -3,15 +3,17 @@ import { GetRoutes } from './routes/GetRoutes';
 import { Navbar } from './components/Navbar';
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
+import Box from '@mui/material/Box';
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <div className='container'>
-          <Navbar />
-        </div>
-        <GetRoutes />
+        <Navbar />
+
+        <Box sx={{ p: 2 }}>
+          <GetRoutes />
+        </Box>
       </BrowserRouter>
     </>
   );

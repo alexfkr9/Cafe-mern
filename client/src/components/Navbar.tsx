@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-// import { makeStyles } from '@mui/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,33 +16,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
-// const classes = {
-//   navlinks: {
-//     marginLeft: '20px',
-//     display: 'flex'
-//   },
-//   logo: {
-//     flexGrow: '1'
-//     // cursor: "pointer",
-//   },
-//   link: {
-//     textDecoration: 'none',
-//     color: 'white',
-//     fontSize: '20px',
-//     marginLeft: '20px',
-//     '&:hover': {
-//       color: 'yellow'
-//     }
-//   },
-//   selected: {
-//     color: 'yellow'
-//   }
-// };
-
 const pages = ['all-user', 'user', 'create'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
-// function ResponsiveAppBar() {
+const settings = ['all-user', 'user', 'create'];
 
 export const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -204,41 +178,3 @@ export const Navbar = () => {
     </AppBar>
   );
 };
-
-// export const Navbar = () => {
-// const classes = useStyles();
-// return (
-//   <Box sx={{ flexGrow: 1 }}>
-//     <AppBar position='static'>
-//       <Toolbar>
-//         <Typography variant='h4' className={classes.logo}>
-//           Menu
-//         </Typography>
-//         <div className={classes.navlinks}>
-//           <NavLink
-//             to='/all-user'
-//             className={classes.link}
-//             activeClassName={classes.selected}
-//           >
-//             Все посетители
-//           </NavLink>
-//           <NavLink
-//             to='/user'
-//             className={classes.link}
-//             activeClassName={classes.selected}
-//           >
-//             Создать заказ
-//           </NavLink>
-//           <NavLink
-//             to='/create'
-//             className={classes.link}
-//             activeClassName={classes.selected}
-//           >
-//             Создать меню
-//           </NavLink>
-//         </div>
-//       </Toolbar>
-//     </AppBar>
-//   </Box>
-// );
-// };
