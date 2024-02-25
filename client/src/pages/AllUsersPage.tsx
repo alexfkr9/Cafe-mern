@@ -77,7 +77,7 @@ export const AllUsersPage = () => {
 
   // Delete User
   async function DeleteUser(id: string) {
-    const response = await fetch(`${apiUrl}/api/user` + id, {
+    const response = await fetch(`${apiUrl}/api/user/` + id, {
       method: 'DELETE',
       headers: { Accept: 'application/json' }
     });
@@ -117,7 +117,11 @@ export const AllUsersPage = () => {
 
   if (finalArray.length && newMenuAll.length) {
     for (let i = 0; i < newMenuAll.length; i++) {
-      let all = [...newMenuAll[i], ...finalArray[i]];
+       console.log("🚀 ~ AllUsersPage ~ finalArray:", finalArray)
+      console.log("🚀 ~ AllUsersPage ~ newMenuAll:", newMenuAll)
+      // let all = [...newMenuAll[i], ...finalArray[i]];
+      let all = [...newMenuAll[i]];
+     
 
       allTable.push(all);
     }

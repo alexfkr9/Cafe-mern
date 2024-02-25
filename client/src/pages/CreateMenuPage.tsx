@@ -125,19 +125,22 @@ export const CreateMenuPage = () => {
 
   // Отправка файла
   const [selectedFile, setSelectedFile] = useState<any>();
-  const [isSelected, setIsSelected] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);  
 
-  const saveFile = (event: {
-    target: { files: React.SetStateAction<undefined>[] };
-  }) => {
+  const saveFile = (event: any) => {
+    console.log("🚀 ~ submitUser ~ selectedFile:", event.target.files[0]);
     setSelectedFile(event.target.files[0]);
     setIsSelected(true);
   };
+
+  console.log("🚀 ~ submitUser ~ selectedFile:", selectedFile);
 
   const submitUser = () => {
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('form', JSON.stringify(form));
+    console.log("🚀 ~ submitUser ~ selectedFile:", selectedFile);
+    console.log("🚀 ~ submitUser ~ form:", form)
 
     fetch('/api/menu', {
       method: 'POST',
@@ -152,6 +155,7 @@ export const CreateMenuPage = () => {
         console.error('Error:', error);
       });
   };
+    
 
   // for striped table
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -224,18 +228,20 @@ export const CreateMenuPage = () => {
           }}
         >
           <input
+          type='file'
+          name="images"
             accept='image/*'
-            onChange={() => saveFile}
+            onChange={saveFile}
             style={{ display: 'none' }}
             id='raised-button-file'
-            multiple
-            type='file'
+            multiple            
           />
           <label htmlFor='raised-button-file'>
             <Button size='small' variant='contained' component='span'>
               Upload
             </Button>
           </label>
+          
 
           {/* Dish image data */}
           {isSelected ? (
@@ -244,7 +250,7 @@ export const CreateMenuPage = () => {
               <p>Filetype: {selectedFile.type}</p>
               <p>Size in bytes: {selectedFile.size}</p>
               <p>
-                lastModifiedDate:{' '}
+                lastModifiedDate:
                 {selectedFile.lastModifiedDate.toLocaleDateString()}
               </p>
             </div>

@@ -26,11 +26,14 @@ export const UserMenuPage = () => {
   const [error, setError] = useState<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
+  console.log("🚀 ~ UserMenuPage ~ menu:", menu);
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState([]);
   const [arr, setArr] = useState<any>([]);
   const [isSnackOpen, setSnackOpen] = useState(false);
   const [isDisable, setDisable] = useState(false);
+  const [order, setOrder] = useState<any>({});
+  console.log("🚀 ~ UserMenuPage ~ order:", order)
 
   useEffect(() => {
     fetch(`${apiUrl}/api/menu`)
@@ -58,7 +61,8 @@ export const UserMenuPage = () => {
       },
       body: JSON.stringify({
         name: name || (Math.random() + 1).toString(36).substring(7),
-        quantity: quantity
+        // quantity: quantity,
+        order: order
       })
     });
     if (response.ok === true) {
@@ -73,10 +77,15 @@ export const UserMenuPage = () => {
   };
 
   const changeHandler = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, dishId: string
   ) => {
-    arr[event.target.id] = event.target.value;
-    setQuantity(arr.map(Number));
+    // const dishId = Number(event.target.id);
+    const quantity = Number(event.target.value);
+    // arr[dishId] = quantity;
+    console.log(dishId);
+   
+    // setQuantity(arr.map(Number));
+    setOrder({...order, [dishId]: quantity});
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -152,7 +161,7 @@ export const UserMenuPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {menu.map((product: any, index) => (
+              {menu.map((product: any, index: number) => (
                 <StyledTableRow key={product._id}>
                   <StyledTableCell>{product.name}</StyledTableCell>
                   <StyledTableCell align='center'>
@@ -177,7 +186,7 @@ export const UserMenuPage = () => {
                       disabled={isDisable}
                       id={String(index)}
                       value={quantity[index] || 0}
-                      onChange={(e) => changeHandler(e)}
+                      onChange={(e) => changeHandler(e, product._id)}
                       autoComplete='off'
                     />
                   </StyledTableCell>
