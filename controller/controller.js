@@ -69,7 +69,7 @@ exports.createUser = async function (req, res) {
   // // отправляем пользователя
   // res.send(data);
 
-  const user = new User({ name: req.body.name, quantity: req.body.quantity });
+  const user = new User({ name: req.body.name, order: req.body.order });
   user.save(function (err) {
     if (err) return console.log(err);
     console.log(user);

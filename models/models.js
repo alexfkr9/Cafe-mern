@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const userScheme = new Schema(
   {
     name: String,
-    quantity: Array,
+    // quantity: Array,
+    order: Array
   },
   { versionKey: false }
 );
