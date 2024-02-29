@@ -54,6 +54,13 @@ exports.createUser = async function (req, res) {
   if (!req.body) return res.sendStatus(400);
   if (!req.body) return console.log('<h5>user!</h5>');
 
+  const user = new User({ name: req.body.name, order: req.body.order });
+  user.save(function (err) {
+    if (err) return console.log(err);
+    console.log(user);
+    res.send(user);
+  });
+
   // const user =    {
   //                     _id: (Math.random() + 1).toString(36).substring(7),
   //                     name: req.body.name,
@@ -69,12 +76,6 @@ exports.createUser = async function (req, res) {
   // // отправляем пользователя
   // res.send(data);
 
-  const user = new User({ name: req.body.name, order: req.body.order });
-  user.save(function (err) {
-    if (err) return console.log(err);
-    console.log(user);
-    res.send(user);
-  });
 };
 
 exports.deleteUserById = async function (req, res) {

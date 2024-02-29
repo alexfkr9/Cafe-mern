@@ -5,7 +5,7 @@ const userScheme = new Schema(
   {
     name: String,
     // quantity: Array,
-    order: Array
+    order: {}
   },
   { versionKey: false }
 );

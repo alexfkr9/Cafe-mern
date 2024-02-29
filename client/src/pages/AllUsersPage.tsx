@@ -4,7 +4,9 @@ import { apiUrl } from '../api/constants';
 
 import { Loader } from '../components/Loader';
 
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
+
+import Box from '@mui/material/Box';
 
 import {
   Paper,
@@ -23,11 +25,41 @@ import { styled } from '@mui/material/styles';
 
 import Grid from '@mui/material/Grid';
 
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
+const centeredStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '20px'
+};
+
+
 export const AllUsersPage = () => {
   const [error, setError] = useState<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
+  console.log("🚀 ~ AllUsersPage ~ menu:", menu);
+
   const [users, setUsers] = useState<any>([]);
+  console.log("🚀 ~ AllUsersPage ~ users:", users);
+
+  const [userOrder, setUserOrder] = useState<any>({ name: '', order: [{}] });
+  console.log("🚀 ~ AllUsersPage ~ userOrder:", userOrder);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/menu`)
@@ -60,6 +92,29 @@ export const AllUsersPage = () => {
       );
   }, []);
 
+  // add complete dish details to the short order form
+  function getUserOrder(userOrder: any) {
+
+    const oderDishIdAndQuontity = Object.entries(userOrder.order);
+
+    const userOrderDishId = Object.keys(userOrder.order);
+
+    const userOrderData = menu.filter((item: any) => userOrderDishId.includes(item._id));
+
+    const dishes = userOrderData.map((dish: any) => {
+      const found: any = oderDishIdAndQuontity.find((element) => element[0] === dish._id);
+      return { ...dish, quantity: found[1] };
+    });
+
+    console.log("🚀 ~ allMenu ~ allMenu:", dishes);
+
+    const order = { ...userOrder, order: dishes };
+
+    setUserOrder(order);
+    return order;
+  };
+
+
   function updateUser() {
     fetch(`${apiUrl}/api/user`)
       .then((res) => res.json())
@@ -73,7 +128,7 @@ export const AllUsersPage = () => {
           setError(error);
         }
       );
-  }
+  };
 
   // Delete User
   async function DeleteUser(id: string) {
@@ -100,28 +155,26 @@ export const AllUsersPage = () => {
   }
 
   let finalArray = [];
-  if (users.length) {
-    let oderLenght = users[0].quantity.length;
+  // if (users.length) {
+  //   let oderLenght = users[0].quantity.length;
 
-    for (let i = 0; i < oderLenght; i++) {
-      let newArray: any[] = [];
-      users.map((user: { quantity: any[] }) => {
-        return newArray.push(user.quantity[i]);
-      });
-      newArray.map(Number);
-      finalArray.push(newArray.map(Number));
-    }
-  }
+  //   for (let i = 0; i < oderLenght; i++) {
+  //     let newArray: any[] = [];
+  //     users.map((user: { quantity: any[]; }) => {
+  //       // return newArray.push(user.quantity[i]);
+  //     });
+  //     newArray.map(Number);
+  //     finalArray.push(newArray.map(Number));
+  //   }
+  // }
 
   let allTable = [];
 
   if (finalArray.length && newMenuAll.length) {
     for (let i = 0; i < newMenuAll.length; i++) {
-       console.log("🚀 ~ AllUsersPage ~ finalArray:", finalArray)
-      console.log("🚀 ~ AllUsersPage ~ newMenuAll:", newMenuAll)
       // let all = [...newMenuAll[i], ...finalArray[i]];
       let all = [...newMenuAll[i]];
-     
+
 
       allTable.push(all);
     }
@@ -157,23 +210,29 @@ export const AllUsersPage = () => {
   } else {
     return (
       <>
-        <h2>Все посетители</h2>
-        <Grid>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: '#cceeff' }}>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Dish</TableCell>
-                  <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                    Cost
-                  </TableCell>
-                  <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                    Measure
-                  </TableCell>
-                  {users.map((user: any) => (
-                    <TableCell key={user._id} align='center'>
-                      Client&nbsp;<b>{user.name}</b>
-                      <IconButton
+
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+
+            {/* Orders */}
+
+            <Grid xs={6} md={4}>
+              <div style={centeredStyle}>
+                <Typography variant="h6" component='h2'>Orders</Typography>
+              </div>
+
+              <Item><List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                {users.map((user: any) => (
+                  <>
+                    <ListItem key={user._id}
+                    >
+                      <Typography variant="body1" component='span' sx={{ fontSize: '14px', flexGrow: 1, pl: 2 }}>
+                        Client&nbsp;<b>{user.name}</b>
+                      </Typography>
+
+                      {/* <Button variant="outlined" onClick={() => setUserOrder(user)}>Outlined</Button> */}
+                      <Button variant="outlined" onClick={() => getUserOrder(user)}>Details</Button>
+                      <Typography variant="body1"><IconButton
                         edge='end'
                         aria-label='delete'
                         color='error'
@@ -181,31 +240,75 @@ export const AllUsersPage = () => {
                         onClick={() => DeleteUser(user._id)}
                       >
                         <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <StyledTableRow
-                    key={(Math.random() + 1).toString(36).substring(7)}
-                  >
-                    {row.map((item, index) => (
-                      <StyledTableCell
-                        align='center'
-                        sx={{ '&:first-of-type': { textAlign: 'left' } }}
-                        key={(Math.random() + 1).toString(36).substring(7)}
-                      >
-                        {item}
-                      </StyledTableCell>
-                    ))}
-                  </StyledTableRow>
+                      </IconButton></Typography>
+
+                    </ListItem>
+                    <Divider variant="inset" component="li" /></>
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
+
+              </List></Item>
+            </Grid>
+
+            {/* Order details */}
+
+            <Grid xs={6} md={8}>
+              <Item><h2>Order details</h2>{userOrder.name}
+                <Grid>
+                  <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+                      <TableHead>
+                        <TableRow sx={{ backgroundColor: '#cceeff' }}>
+                          <TableCell sx={{ fontWeight: 'bold' }}>Dish</TableCell>
+                          <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                            Cost
+                          </TableCell>
+                          <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                            Measure
+                          </TableCell>
+                          <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                            Quantity
+                          </TableCell>
+
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {userOrder.order.map((item: any) => (
+                          <StyledTableRow
+                            key={(Math.random() + 1).toString(36).substring(7)}
+                          >
+                            {/* {userOrder.order.map((item: any, index: number) => ( */}
+                            <StyledTableCell
+                              align='center'
+                              sx={{ '&:first-of-type': { textAlign: 'left' } }}
+
+                            >
+                              {item.name}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              align='center'
+                            >
+                              {item.cost}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              align='center'
+                            >
+                              {item.measure}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              align='center'
+                            >
+                              {item.quantity}
+                            </StyledTableCell>
+                            {/* ))} */}
+                          </StyledTableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Grid></Item>
+            </Grid>
+          </Grid>
+        </Box >
       </>
     );
   }

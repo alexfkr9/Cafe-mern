@@ -32,8 +32,8 @@ export const UserMenuPage = () => {
   const [arr, setArr] = useState<any>([]);
   const [isSnackOpen, setSnackOpen] = useState(false);
   const [isDisable, setDisable] = useState(false);
-  const [order, setOrder] = useState<any>({});
-  console.log("🚀 ~ UserMenuPage ~ order:", order)
+  const [order, setOrder] = useState<any>();
+  console.log("🚀 ~ UserMenuPage ~ order:", order);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/menu`)
@@ -71,7 +71,7 @@ export const UserMenuPage = () => {
     }
   }
 
-  const getName = (event: { target: { value: any } }) => {
+  const getName = (event: { target: { value: any; }; }) => {
     const n = event.target.value;
     setName(n);
   };
@@ -83,9 +83,9 @@ export const UserMenuPage = () => {
     const quantity = Number(event.target.value);
     // arr[dishId] = quantity;
     console.log(dishId);
-   
+
     // setQuantity(arr.map(Number));
-    setOrder({...order, [dishId]: quantity});
+    setOrder({ ...order, [dishId]: quantity });
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
