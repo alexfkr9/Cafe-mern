@@ -47,13 +47,13 @@ export const OrdersList = () => {
   const [error, setError] = useState<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
-  console.log("🚀 ~ /AdminPage ~ menu:", menu);
+
 
   const [users, setUsers] = useState<any>([]);
-  console.log("🚀 ~ /AdminPage ~ users:", users);
+
 
   const [userOrder, setUserOrder] = useState<any>({ name: '', order: [{}] });
-  console.log("🚀 ~ /AdminPage ~ userOrder:", userOrder);
+
 
   useEffect(() => {
     fetch(`${apiUrl}/api/menu`)
@@ -64,6 +64,7 @@ export const OrdersList = () => {
           setMenu(result);
         },
         (error) => {
+          console.log(error);
           setIsLoaded(true);
           setError(error);
         }

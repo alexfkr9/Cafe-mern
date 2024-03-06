@@ -8,16 +8,16 @@ import { Box, Grid } from '@mui/material';
 export const AdminPage = () => {
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={6}>
-          <OrdersList />
-        </Grid>
-        <Grid xs={12} md={6}>
-          <OrderDetails />
-        </Grid>
+
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6} mt={4}>
+        <OrdersList />
       </Grid>
-    </Box>
+      <Grid item xs={12} md={6} mt={4}>
+        <OrderDetails />
+      </Grid>
+    </Grid>
+
   );
 
 };

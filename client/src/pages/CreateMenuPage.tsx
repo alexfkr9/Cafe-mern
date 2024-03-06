@@ -46,8 +46,6 @@ export const CreateMenuPage = () => {
       );
   }, []);
 
-  console.log(menu);
-
   console.log(process.env.NODE_ENV);
 
   // Update
@@ -66,9 +64,9 @@ export const CreateMenuPage = () => {
       );
   }
 
-  // Получение одного пользователя
-  async function GetUser(id: string) {
-    const response = await fetch(`${apiUrl}/api/menu` + id, {
+  // Get a dish from server
+  async function GetDish(id: string) {
+    const response = await fetch(`${apiUrl}/api/menu/` + id, {
       method: 'GET',
       headers: { Accept: 'application/json' }
     });
@@ -98,18 +96,21 @@ export const CreateMenuPage = () => {
     }
   }
 
-  // Удаление пользователя
-  async function DeleteUser(id: string) {
-    const response = await fetch(`${apiUrl}/api/menu` + id, {
+  // Remove dish
+  async function DeleteDish(id: string) {
+    console.log("DeleteDish ~ id:", id);
+    const response = await fetch(`${apiUrl}/api/menu/` + id, {
       method: 'DELETE',
       headers: { Accept: 'application/json' }
     });
+    console.log("DeleteDish ~ response:", response);
     if (response.ok === true) {
-      updateUser();
+      updateUser(); return;
     }
+    console.log("Error");
   }
 
-  const changeHandler = (e: { target: { name: any; value: any } }) => {
+  const changeHandler = (e: { target: { name: any; value: any; }; }) => {
     setForm((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
   };
 
@@ -125,7 +126,7 @@ export const CreateMenuPage = () => {
 
   // Отправка файла
   const [selectedFile, setSelectedFile] = useState<any>();
-  const [isSelected, setIsSelected] = useState(false);  
+  const [isSelected, setIsSelected] = useState(false);
 
   const saveFile = (event: any) => {
     console.log("🚀 ~ submitUser ~ selectedFile:", event.target.files[0]);
@@ -135,16 +136,20 @@ export const CreateMenuPage = () => {
 
   console.log("🚀 ~ submitUser ~ selectedFile:", selectedFile);
 
-  const submitUser = () => {
+  const getFormData = () => {
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('form', JSON.stringify(form));
     console.log("🚀 ~ submitUser ~ selectedFile:", selectedFile);
-    console.log("🚀 ~ submitUser ~ form:", form)
+    console.log("🚀 ~ submitUser ~ form:", form);
+    return formData;
+  };
 
+  const submitUser = () => {
+    getFormData();
     fetch('/api/menu', {
       method: 'POST',
-      body: formData
+      body: getFormData()
     })
       .then((response) => response.json())
       .then((result) => {
@@ -155,7 +160,7 @@ export const CreateMenuPage = () => {
         console.error('Error:', error);
       });
   };
-    
+
 
   // for striped table
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -228,20 +233,20 @@ export const CreateMenuPage = () => {
           }}
         >
           <input
-          type='file'
-          name="images"
+            type='file'
+            name="images"
             accept='image/*'
             onChange={saveFile}
             style={{ display: 'none' }}
             id='raised-button-file'
-            multiple            
+            multiple
           />
           <label htmlFor='raised-button-file'>
             <Button size='small' variant='contained' component='span'>
               Upload
             </Button>
           </label>
-          
+
 
           {/* Dish image data */}
           {isSelected ? (
@@ -298,7 +303,7 @@ export const CreateMenuPage = () => {
                     {product.measure}
                   </StyledTableCell>
                   <StyledTableCell sx={{ fontWeight: 'bold' }} align='center'>
-                    <img src={`${apiUrl}/${product.image}`} alt='dish' />
+                    <img src={`${apiUrl}/${product.image}`} alt={product.image} />
                   </StyledTableCell>
                   <StyledTableCell align='center'>
                     <Button
@@ -306,7 +311,7 @@ export const CreateMenuPage = () => {
                       variant='contained'
                       color='secondary'
                       key={product.id}
-                      onClick={() => GetUser(product._id)}
+                      onClick={() => GetDish(product._id)}
                     >
                       Edit
                     </Button>
@@ -317,7 +322,7 @@ export const CreateMenuPage = () => {
                       aria-label='delete'
                       color='error'
                       key={product.id}
-                      onClick={() => DeleteUser(product._id)}
+                      onClick={() => DeleteDish(product._id)}
                     >
                       <DeleteIcon />
                     </IconButton>

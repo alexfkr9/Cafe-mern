@@ -28,11 +28,10 @@ export const UserMenuPage = () => {
   const [menu, setMenu] = useState([]);
   console.log("🚀 ~ UserMenuPage ~ menu:", menu);
   const [name, setName] = useState('');
-  const [quantity, setQuantity] = useState([]);
-  const [arr, setArr] = useState<any>([]);
+
   const [isSnackOpen, setSnackOpen] = useState(false);
   const [isDisable, setDisable] = useState(false);
-  const [order, setOrder] = useState<any>();
+  const [order, setOrder] = useState<any>({});
   console.log("🚀 ~ UserMenuPage ~ order:", order);
 
   useEffect(() => {
@@ -42,7 +41,6 @@ export const UserMenuPage = () => {
         (result) => {
           setIsLoaded(true);
           setMenu(result);
-          setArr(Array.from({ length: result.length }, () => 0));
         },
         (error) => {
           setIsLoaded(true);
@@ -61,7 +59,6 @@ export const UserMenuPage = () => {
       },
       body: JSON.stringify({
         name: name || (Math.random() + 1).toString(36).substring(7),
-        // quantity: quantity,
         order: order
       })
     });
@@ -77,15 +74,12 @@ export const UserMenuPage = () => {
   };
 
   const changeHandler = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, dishId: string
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    // const dishId = Number(event.target.id);
-    const quantity = Number(event.target.value);
-    // arr[dishId] = quantity;
-    console.log(dishId);
 
-    // setQuantity(arr.map(Number));
-    setOrder({ ...order, [dishId]: quantity });
+    const { id: dishId, value: quantity } = e.target;
+
+    setOrder({ ...order, [dishId]: Number(quantity) });
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -171,10 +165,7 @@ export const UserMenuPage = () => {
                     {product.measure}
                   </StyledTableCell>
                   <StyledTableCell align='center'>
-                    <img
-                      src={`http://localhost:3000/${product.image}`}
-                      alt='dish'
-                    />
+                    <img src={`${apiUrl}/${product.image}`} alt={product.image} />
                   </StyledTableCell>
                   <StyledTableCell align='right'>
                     <TextField
@@ -184,9 +175,10 @@ export const UserMenuPage = () => {
                       size='small'
                       name='quantity'
                       disabled={isDisable}
-                      id={String(index)}
-                      value={quantity[index] || 0}
-                      onChange={(e) => changeHandler(e, product._id)}
+                      id={product._id}
+                      placeholder='0'
+                      value={order[product._id]}
+                      onChange={changeHandler}
                       autoComplete='off'
                     />
                   </StyledTableCell>
