@@ -8,10 +8,10 @@ import { UserMenuPage } from '../pages/UserMenuPage';
 export const GetRoutes = () => {
   return (
     <Routes>
-      <Route path='/all-user' element={<AdminPage />}></Route>
       <Route path='/user' element={<UserMenuPage />}></Route>
-      <Route path='/create' element={<CreateMenuPage />}></Route>
-      <Route path='*' element={<Navigate to='/create' replace />} />
+      <Route path='/admin' element={<AdminPage />}></Route>
+      <Route path='/create-menu' element={<CreateMenuPage />}></Route>
+      {/* <Route path='*' element={<Navigate to='/user' replace />} /> */}
     </Routes>
   );
 };

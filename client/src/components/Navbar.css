@@ -1,0 +1,26 @@
+.nav-link {
+    position: relative;
+    text-decoration: none;
+    color: rgb(43, 243, 8);
+
+
+    .nav-link:hover {
+        color: rgb(204, 243, 8);
+    }
+}
+
+a.nav-link.active {
+    color: rgb(234, 255, 1);
+}
+
+.nav-link.active::after {
+    position: absolute;
+    left: 2px;
+    top: 20px;
+    content: "";
+    display: block;
+    width: calc(100% - 4px);
+    height: 4px;
+    border-radius: 2px;
+    background-color: rgb(234, 255, 1);
+}
