@@ -22,6 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { getDishById, getMenu } from '../api/menuApi';
 
 export const CreateMenuPage = () => {
   const [error, setError] = useState<any>(null);
@@ -29,27 +30,26 @@ export const CreateMenuPage = () => {
   const [menu, setMenu] = useState([]);
   const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
 
-  console.log('Url -  ' + apiUrl);
-
+  // Det Menu data
   useEffect(() => {
-    fetch(`${apiUrl}/api/menu`)
-      .then((res) => res.json())
+    getMenu()
       .then(
-        (result) => {
+        (res) => {
           setIsLoaded(true);
-          setMenu(result);
+          setMenu(res);
         },
-        (error) => {
+        (error: any) => {
           setIsLoaded(true);
           setError(error);
         }
       );
   }, []);
 
+
   console.log(process.env.NODE_ENV);
 
   // Update
-  function updateUser() {
+  function updateMenu() {
     fetch(`${apiUrl}/api/menu`)
       .then((res) => res.json())
       .then(
@@ -64,25 +64,47 @@ export const CreateMenuPage = () => {
       );
   }
 
-  // Get a dish from server
-  async function GetDish(id: string) {
-    const response = await fetch(`${apiUrl}/api/menu/` + id, {
-      method: 'GET',
-      headers: { Accept: 'application/json' }
-    });
-    if (response.ok === true) {
-      const user = await response.json();
-      setForm((prevState) => ({
-        _id: user._id,
-        name: user.name,
-        cost: user.cost,
-        measure: user.measure
-      }));
-    }
-  }
 
-  // Изменение пользователя
-  async function EditUser() {
+  // Get a dish from server
+  function getDish(id: string) {
+    setIsLoaded(false);
+    getDishById(id)
+      .then(
+        (res) => {
+          setIsLoaded(true);
+          setForm({
+            _id: res._id,
+            name: res.name,
+            cost: res.cost,
+            measure: res.measure
+          });
+        },
+        (error: any) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+
+      );
+  };
+
+  // async function GetDish(id: string) {
+  //   const response = await fetch(`${apiUrl}/api/menu/` + id, {
+  //     method: 'GET',
+  //     headers: { Accept: 'application/json' }
+  //   });
+  //   if (response.ok === true) {
+  //     const user = await response.json();
+  //     setForm((prevState) => ({
+  //       _id: user._id,
+  //       name: user.name,
+  //       cost: user.cost,
+  //       measure: user.measure
+  //     }));
+  //   }
+  // }
+
+  // Изменение блюда
+  async function editDish() {
     const response = await fetch(`${apiUrl}/api/menu`, {
       method: 'PUT',
       headers: {
@@ -92,7 +114,7 @@ export const CreateMenuPage = () => {
       body: JSON.stringify(form)
     });
     if (response.ok === true) {
-      updateUser();
+      updateMenu();
     }
   }
 
@@ -105,7 +127,7 @@ export const CreateMenuPage = () => {
     });
     console.log("DeleteDish ~ response:", response);
     if (response.ok === true) {
-      updateUser(); return;
+      updateMenu(); return;
     }
     console.log("Error");
   }
@@ -119,8 +141,8 @@ export const CreateMenuPage = () => {
     if (form._id === 0) {
       submitUser();
     } else {
-      console.log('EditUser');
-      EditUser();
+      console.log('editDish');
+      editDish();
     }
   }
 
@@ -154,7 +176,7 @@ export const CreateMenuPage = () => {
       .then((response) => response.json())
       .then((result) => {
         console.log('Success:', result);
-        updateUser();
+        updateMenu();
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -311,7 +333,7 @@ export const CreateMenuPage = () => {
                       variant='contained'
                       color='secondary'
                       key={product.id}
-                      onClick={() => GetDish(product._id)}
+                      onClick={() => getDish(product._id)}
                     >
                       Edit
                     </Button>
