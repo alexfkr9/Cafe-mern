@@ -181,7 +181,7 @@ exports.uploadFile = upload.single('file');
 exports.createMenu = async (req, res) => {
   if (!req.body) return res.sendStatus(400);
 
-  console.log(req.file, req.body, JSON.parse(req.body.form));
+  console.log("req.file", req.file, "req.body", req.body, "req.body.form", JSON.parse(req.body.form));
 
   const form = JSON.parse(req.body.form);
 

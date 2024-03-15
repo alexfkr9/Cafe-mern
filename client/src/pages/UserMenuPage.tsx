@@ -21,6 +21,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import { getMenu } from '../api/menuApi';
 
 export const UserMenuPage = () => {
   const [error, setError] = useState<any>(null);
@@ -35,18 +36,16 @@ export const UserMenuPage = () => {
   console.log("🚀 ~ UserMenuPage ~ order:", order);
 
   useEffect(() => {
-    fetch(`${apiUrl}/api/menu`)
-      .then((res) => res.json())
+    getMenu()
       .then(
-        (result) => {
+        (res) => {
           setIsLoaded(true);
-          setMenu(result);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
+          setMenu(res);
+        })
+      .catch((error: any) => {
+        setIsLoaded(true);
+        setError(error);
+      });
   }, []);
 
   // Добавление пользователя

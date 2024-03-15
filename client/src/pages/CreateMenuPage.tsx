@@ -22,7 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { getDishById, getMenu } from '../api/menuApi';
+import { DeleteDishApi, editDishApi, getDishById, getMenu, submitMenuApi } from '../api/menuApi';
 
 export const CreateMenuPage = () => {
   const [error, setError] = useState<any>(null);
@@ -30,106 +30,89 @@ export const CreateMenuPage = () => {
   const [menu, setMenu] = useState([]);
   const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
 
-  // Det Menu data
+  // Get Menu data
   useEffect(() => {
     getMenu()
       .then(
         (res) => {
           setIsLoaded(true);
           setMenu(res);
-        },
-        (error: any) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
+        })
+      .catch((error: any) => {
+        setIsLoaded(true);
+        setError(error);
+      });
+
+    // .then(
+    //   (res) => {
+    //     setIsLoaded(true);
+    //     setMenu(res);
+    //   },
+    //   (error: any) => {
+    //     console.log("useEffect ~ error:", error);
+
+    //     setIsLoaded(true);
+    //     setError(error);
+    //   }
+    // );
   }, []);
 
 
   console.log(process.env.NODE_ENV);
 
   // Update
-  function updateMenu() {
-    fetch(`${apiUrl}/api/menu`)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setMenu(result);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
+  async function updateMenu() {
+    try {
+      const res = await getMenu();
+      setIsLoaded(true);
+      setMenu(res);
+    } catch (error) {
+      setIsLoaded(true);
+      setError(error);
+    }
   }
 
 
   // Get a dish from server
-  function getDish(id: string) {
-    setIsLoaded(false);
-    getDishById(id)
-      .then(
-        (res) => {
-          setIsLoaded(true);
-          setForm({
-            _id: res._id,
-            name: res.name,
-            cost: res.cost,
-            measure: res.measure
-          });
-        },
-        (error: any) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-
-      );
+  async function getDish(id: string) {
+    try {
+      const res = await getDishById(id);
+      setIsLoaded(true);
+      setForm({
+        _id: res._id,
+        name: res.name,
+        cost: res.cost,
+        measure: res.measure
+      });
+    } catch (error) {
+      setIsLoaded(true);
+      setError(error);
+    }
   };
 
-  // async function GetDish(id: string) {
-  //   const response = await fetch(`${apiUrl}/api/menu/` + id, {
-  //     method: 'GET',
-  //     headers: { Accept: 'application/json' }
-  //   });
-  //   if (response.ok === true) {
-  //     const user = await response.json();
-  //     setForm((prevState) => ({
-  //       _id: user._id,
-  //       name: user.name,
-  //       cost: user.cost,
-  //       measure: user.measure
-  //     }));
-  //   }
-  // }
 
-  // Изменение блюда
+  // Change Dish
   async function editDish() {
-    const response = await fetch(`${apiUrl}/api/menu`, {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(form)
-    });
-    if (response.ok === true) {
+    try {
+      await editDishApi(form);
+      setIsLoaded(true);
       updateMenu();
+    } catch (error) {
+      setIsLoaded(true);
+      setError(error);
     }
   }
 
   // Remove dish
   async function DeleteDish(id: string) {
-    console.log("DeleteDish ~ id:", id);
-    const response = await fetch(`${apiUrl}/api/menu/` + id, {
-      method: 'DELETE',
-      headers: { Accept: 'application/json' }
-    });
-    console.log("DeleteDish ~ response:", response);
-    if (response.ok === true) {
-      updateMenu(); return;
+    try {
+      await DeleteDishApi(id);
+      setIsLoaded(true);
+      updateMenu();
+    } catch (error) {
+      setIsLoaded(true);
+      setError(error);
     }
-    console.log("Error");
   }
 
   const changeHandler = (e: { target: { name: any; value: any; }; }) => {
@@ -167,20 +150,15 @@ export const CreateMenuPage = () => {
     return formData;
   };
 
-  const submitUser = () => {
-    getFormData();
-    fetch('/api/menu', {
-      method: 'POST',
-      body: getFormData()
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log('Success:', result);
-        updateMenu();
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+  const submitUser = async () => {
+    try {
+      await submitMenuApi(getFormData());
+      setIsLoaded(true);
+      updateMenu();
+    } catch (error) {
+      setIsLoaded(true);
+      setError(error);
+    }
   };
 
 
@@ -208,7 +186,7 @@ export const CreateMenuPage = () => {
   // return <h1>Create Menu</h1>;
 
   if (error) {
-    return <div>Ошибка: {error.message}</div>;
+    return <div>Помилкака: {error.message}</div>;
   } else if (!isLoaded) {
     return <Loader />;
   } else {
