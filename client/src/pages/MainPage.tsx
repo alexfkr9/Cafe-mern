@@ -14,7 +14,8 @@ import {
   TableBody,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Grid
 } from '@mui/material';
 
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -22,17 +23,18 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { getMenu } from '../api/menuApi';
+import CardProduct from '../components/CardProduct';
 
-export const UserMenuPage = () => {
+export const MainPage = () => {
   const [error, setError] = useState<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
-  console.log("🚀 ~ UserMenuPage ~ menu:", menu);
+
   const [name, setName] = useState('');
 
   const [isSnackOpen, setSnackOpen] = useState(false);
   const [isDisable, setDisable] = useState(false);
-  const [order, setOrder] = useState<any>({});
+  const [order, setOrder] = useState<any>([]);
   console.log("🚀 ~ UserMenuPage ~ order:", order);
 
   useEffect(() => {
@@ -62,6 +64,7 @@ export const UserMenuPage = () => {
       })
     });
     if (response.ok === true) {
+      console.log(response);
       setDisable(true);
       setSnackOpen(true);
     }
@@ -76,10 +79,30 @@ export const UserMenuPage = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
 
-    const { id: dishId, value: quantity } = e.target;
+    const { id, value: qty } = e.target;
 
-    setOrder({ ...order, [dishId]: Number(quantity) });
+    const currentId = order.find((item: { id: string; }) => item.id === id);
+
+    if (currentId) {
+      // change dish quantity if dish was edded
+      const arr = order.map((element: any) => {
+        if (element.id === id) {
+          console.log(element);
+          return { ...element, qty: Number(qty) };
+        }
+        return element;
+      });
+      console.log(arr);
+      setOrder(arr);
+    }
+    // add dish to order if is`t this dish
+    else {
+      setOrder([...order, { id, qty: Number(qty) }]);
+    }
+
   };
+
+  console.log(order);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -100,6 +123,7 @@ export const UserMenuPage = () => {
       border: 0
     }
   }));
+
 
   if (error) {
     return <div>Ошибка: {error.message}</div>;
@@ -133,6 +157,18 @@ export const UserMenuPage = () => {
             Создать заказ
           </Button>
         </Box>
+
+        {/* Product items */}
+        <Grid container p={4} spacing={2} >
+
+          {menu.map((product: any, index: number) => (
+            <Grid item xs={6} md={3}>
+              <CardProduct product={product} />
+            </Grid>
+          ))}
+        </Grid>
+
+
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label='simple table'>

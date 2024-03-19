@@ -90,18 +90,15 @@ export const OrdersList = () => {
   // add complete dish details to the short order form
   function getUserOrder(userOrder: any) {
 
-    const oderDishIdAndQuontity = Object.entries(userOrder.order);
+    const userOrderDishId = userOrder.order.map((item: { id: any; }) => item.id);
 
-    const userOrderDishId = Object.keys(userOrder.order);
+    const userMenu = menu.filter((item: any) => userOrderDishId.includes(item._id));
 
-    const userOrderData = menu.filter((item: any) => userOrderDishId.includes(item._id));
-
-    const dishes = userOrderData.map((dish: any) => {
-      const found: any = oderDishIdAndQuontity.find((element) => element[0] === dish._id);
-      return { ...dish, quantity: found[1] };
+    // add quantity of dishes to user menu
+    const dishes = userMenu.map((dish: any) => {
+      const found: any = userOrder.order.find((item: any) => item.id === dish._id);
+      return { ...dish, quantity: found.qty };
     });
-
-    console.log("🚀 ~ allMenu ~ allMenu:", dishes);
 
     const order = { ...userOrder, order: dishes };
 

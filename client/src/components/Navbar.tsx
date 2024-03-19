@@ -21,7 +21,7 @@ import "./Navbar.css";
 export const Navbar = () => {
 
 
-  const [pages, setPages] = useState([['user', 'головна'], ['admin', 'адмін панель'], ['create-menu', 'створити меню']]);
+  const [pages, setPages] = useState([['user', 'головна'], ['admin', 'адмін панель']]);
 
   function switchNavItems(event: { target: any; }) {
 
@@ -57,7 +57,9 @@ export const Navbar = () => {
   // };
 
   return (
-    <AppBar position='static'>
+    <AppBar position='static' sx={{
+      background: 'linear-gradient(45deg, #0924F1 20%, #4a0572 80%)',
+    }}>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -85,7 +87,7 @@ export const Navbar = () => {
               <Button
                 key={page[0]}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'white', display: 'block', '&:first-child': { mr: 'auto' } }}
               >
                 <NavLink
                   className="nav-link"
