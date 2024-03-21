@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { setCurrentOrder } from '../../../redux/orderSlice';
 
 import { apiUrl } from '../../../api/constants';
 
+import "./OrdersList.css";
+
 import { Loader } from '../../../components/Loader';
 
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, ListItemButton } from '@mui/material';
 
 import {
   Paper
@@ -21,7 +23,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -45,14 +46,10 @@ export const OrdersList = () => {
   const dispatch = useDispatch();
 
   const [error, setError] = useState<any>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState({ menu: false, user: false });
   const [menu, setMenu] = useState([]);
 
-
   const [users, setUsers] = useState<any>([]);
-
-
-  const [userOrder, setUserOrder] = useState<any>({ name: '', order: [{}] });
 
 
   useEffect(() => {
@@ -60,12 +57,12 @@ export const OrdersList = () => {
       .then((res) => res.json())
       .then(
         (result) => {
-          setIsLoaded(true);
+          setIsLoaded({ ...isLoaded, menu: true });
           setMenu(result);
         },
         (error) => {
           console.log(error);
-          setIsLoaded(true);
+          setIsLoaded({ ...isLoaded, menu: true });
           setError(error);
         }
       );
@@ -76,19 +73,36 @@ export const OrdersList = () => {
       .then((res) => res.json())
       .then(
         (result) => {
-          setIsLoaded(true);
+          setIsLoaded({ ...isLoaded, user: true });
           setUsers(result);
+          // getUserOrder(users[0]);
+          // setActiveItem(result[0]._id);
         },
-
         (error) => {
-          setIsLoaded(true);
+          setIsLoaded({ ...isLoaded, user: true });
           setError(error);
         }
       );
   }, []);
 
+
+  // set first order active
+  if (users.length && menu.length) {
+    console.log(users);
+  }
+
+  const [activeItem, setActiveItem] = useState(1);
+
+  const handleClick = (index: React.SetStateAction<number>) => {
+    console.log("handleClick ~ item:", index);
+
+    setActiveItem(index);
+  };
+
+
   // add complete dish details to the short order form
   function getUserOrder(userOrder: any) {
+    console.log("getUserOrder ~ userOrder:", userOrder);
 
     const userOrderDishId = userOrder.order.map((item: { id: any; }) => item.id);
 
@@ -100,13 +114,10 @@ export const OrdersList = () => {
       return { ...dish, quantity: found.qty };
     });
 
-    const order = { ...userOrder, order: dishes };
+    const Order = { ...userOrder, order: dishes };
 
-    setUserOrder(order);
+    dispatch(setCurrentOrder(Order));
 
-    dispatch(setCurrentOrder(order));
-
-    return order;
   };
 
 
@@ -115,11 +126,11 @@ export const OrdersList = () => {
       .then((res) => res.json())
       .then(
         (result) => {
-          setIsLoaded(true);
+          setIsLoaded({ ...isLoaded, user: true });
           setUsers(result);
         },
         (error) => {
-          setIsLoaded(true);
+          setIsLoaded({ ...isLoaded, user: true });
           setError(error);
         }
       );
@@ -178,25 +189,28 @@ export const OrdersList = () => {
 
   if (error) {
     return <div>Ошибка: {error.message}</div>;
-  } else if (!isLoaded) {
+  } else if (!isLoaded.user && !isLoaded.menu) {
     return <Loader />;
   } else {
     return (
       < Item >
         <div style={centeredStyle}>
-          <Typography variant="h6" component='h2'>Orders</Typography>
+          <h2>Orders</h2>
         </div>
-
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {users.map((user: any) => (
-            <div key={user._id}>
-              <ListItem>
+            <div key={user._id}
+              onClick={() => getUserOrder(user)}
+            >
+              <ListItemButton
+                onClick={(event) => handleClick(user._id)}
+                selected={activeItem === user._id}
+              // className={user._id === activeItem ? "active-order" : ""}
+              >
                 <Typography variant="body1" component='span' sx={{ fontSize: '14px', flexGrow: 1, pl: 2 }}>
                   Client&nbsp;<b>{user.name}</b>
                 </Typography>
-
-                {/* <Button variant="outlined" onClick={() => setUserOrder(user)}>Outlined</Button> */}
-                <Button variant="outlined" onClick={() => getUserOrder(user)}>Details</Button>
+                <Button variant="outlined">Details</Button>
                 <Typography variant="body1"><IconButton
                   edge='end'
                   aria-label='delete'
@@ -207,8 +221,8 @@ export const OrdersList = () => {
                   <DeleteIcon />
                 </IconButton></Typography>
 
-              </ListItem>
-              <Divider variant="inset" component="li" /></div>
+              </ListItemButton>
+              <Divider component="li" /></div>
           ))}
 
         </List>

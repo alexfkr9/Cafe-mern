@@ -1,8 +1,6 @@
 
 import { useSelector } from 'react-redux';
 
-
-
 import {
   Grid,
   Paper,
@@ -57,14 +55,15 @@ export const OrderDetails = () => {
 
 
   return (
-    <Item> {/* Order details */}
+    <> {/* Order details */}
       {userOrder.name !== undefined &&
-
-        <> <h2>Order details</h2>{userOrder.name}
+        <Item>
+          <h2>Order details</h2><p>Клієнт {userOrder.name}</p>
           <Grid>
-            <TableContainer component={Paper}>
+            {/* <TableContainer component={Paper}> */}
+            <TableContainer>
               <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-                <TableHead>
+                <TableHead sx={{ backgroundColor: '#cceeff' }}>
                   <TableRow sx={{ backgroundColor: '#cceeff' }}>
                     <TableCell sx={{ fontWeight: 'bold' }}>Dish</TableCell>
                     <TableCell align='center' sx={{ fontWeight: 'bold' }}>
@@ -119,9 +118,9 @@ export const OrderDetails = () => {
               </Table>
             </TableContainer>
           </Grid>
-        </>
+        </Item >
       }
-    </Item >
+    </>
   );
 
 };

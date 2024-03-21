@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, incrementQuantity, decrementQuantity, clearCart } from '../redux/cartSlice';
 import { Button } from '@mui/material';
 
-function Cart({ id }: any) {
+function AddProductQty({ id }: any) {
     const dispatch = useDispatch();
 
     const [quantity, setQuantity] = useState(0);
@@ -68,4 +68,4 @@ function Cart({ id }: any) {
     );
 }
 
-export default Cart;
+export default AddProductQty;

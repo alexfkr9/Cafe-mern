@@ -8,16 +8,12 @@ import Typography from '@mui/material/Typography';
 import NoImg from "../assets/images/soup.jpg";
 import { apiUrl } from '../api/constants';
 import Stack from '@mui/material/Stack';
-import ProductControlQuantity from './ProductControlQuantity';
-import Cart from './Cart';
+import Cart from './AddProductQty';
 
 export default function CardProduct({ product }: any) {
     const { _id, name, cost, measure, image, alt } = product;
     const imageUrl = `${apiUrl}/${image}`;
 
-    function getQuantity(quantity: number) {
-        console.log(quantity);
-    }
 
     return (
         <Card sx={{ backgroundColor: "#fce4ec" }}>
@@ -34,9 +30,6 @@ export default function CardProduct({ product }: any) {
                     <Typography variant="h4" component="div">
                         {cost} {measure}
                     </Typography>
-                    <CardActions>
-                        <ProductControlQuantity id={_id} />
-                    </CardActions>
 
                 </Stack>
                 <CardActions>
