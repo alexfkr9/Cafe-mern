@@ -13,7 +13,8 @@ import {
   TableBody,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Stack
 } from '@mui/material';
 
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -22,13 +23,20 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { DeleteDishApi, editDishApi, getDishById, getMenu, submitMenuApi } from '../api/menuApi';
+import { deleteDishApi, editDishApi, getDishById, getMenu, submitMenuApi } from '../api/menuApi';
+import CreateDishButton from '../components/CreateDishButton';
 
 export const CreateMenuPage = () => {
   const [error, setError] = useState<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [menu, setMenu] = useState([]);
-  const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '' });
+
+  const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '', image: "" });
+  console.log("CreateMenuPage ~ form:", form);
+
+  const [selectedFile, setSelectedFile] = useState<any>();
+  const [isSelected, setIsSelected] = useState(false);
 
   // Get Menu data
   useEffect(() => {
@@ -77,13 +85,17 @@ export const CreateMenuPage = () => {
   async function getDish(id: string) {
     try {
       const res = await getDishById(id);
+      console.log("getDish ~ res:", res);
+
       setIsLoaded(true);
       setForm({
         _id: res._id,
         name: res.name,
         cost: res.cost,
-        measure: res.measure
+        measure: res.measure,
+        image: res.image
       });
+      setIsEdit(true);
     } catch (error) {
       setIsLoaded(true);
       setError(error);
@@ -93,6 +105,7 @@ export const CreateMenuPage = () => {
 
   // Change Dish
   async function editDish() {
+    console.log("editDish ~ form:", form);
     try {
       await editDishApi(form);
       setIsLoaded(true);
@@ -106,7 +119,7 @@ export const CreateMenuPage = () => {
   // Remove dish
   async function DeleteDish(id: string) {
     try {
-      await DeleteDishApi(id);
+      await deleteDishApi(id);
       setIsLoaded(true);
       updateMenu();
     } catch (error) {
@@ -122,35 +135,29 @@ export const CreateMenuPage = () => {
   // отправка формы
   function Save() {
     if (form._id === 0) {
-      submitUser();
+      submitDish();
     } else {
-      console.log('editDish');
       editDish();
     }
   }
 
   // Отправка файла
-  const [selectedFile, setSelectedFile] = useState<any>();
-  const [isSelected, setIsSelected] = useState(false);
 
   const saveFile = (event: any) => {
-    console.log("🚀 ~ submitUser ~ selectedFile:", event.target.files[0]);
     setSelectedFile(event.target.files[0]);
     setIsSelected(true);
   };
 
-  console.log("🚀 ~ submitUser ~ selectedFile:", selectedFile);
 
   const getFormData = () => {
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('form', JSON.stringify(form));
-    console.log("🚀 ~ submitUser ~ selectedFile:", selectedFile);
-    console.log("🚀 ~ submitUser ~ form:", form);
     return formData;
   };
 
-  const submitUser = async () => {
+  const submitDish = async () => {
+    console.log("submitDish():", getFormData);
     try {
       await submitMenuApi(getFormData());
       setIsLoaded(true);
@@ -192,84 +199,103 @@ export const CreateMenuPage = () => {
   } else {
     return (
       <>
-        <h2>Create Menu</h2>
 
-        {/*  Input dish data  */}
-        <Box
-          component='form'
-          sx={{
-            '& > :not(style)': { m: 1, width: '30ch' }
-          }}
-          noValidate
-          autoComplete='off'
-        >
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Название:'
-            name='name'
-            value={form.name}
-            onChange={changeHandler}
-          />
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Цена:'
-            name='cost'
-            value={form.cost}
-            onChange={changeHandler}
-          />
-          <TextField
-            InputLabelProps={{ shrink: true }}
-            label='Ед.изм:'
-            name='measure'
-            value={form.measure}
-            onChange={changeHandler}
-          />
-        </Box>
+        <Stack direction="row" justifyContent="space-between" spacing={1} mb={2} p={2}>
+          <h2>{!isEdit ? "Дії з меню" : "Редагування страви"}</h2>
 
-        {/*  Input dish image  */}
-        <Box
-          sx={{
-            '& > :not(style)': { mb: 2 }
-          }}
-        >
-          <input
-            type='file'
-            name="images"
-            accept='image/*'
-            onChange={saveFile}
-            style={{ display: 'none' }}
-            id='raised-button-file'
-            multiple
-          />
-          <label htmlFor='raised-button-file'>
-            <Button size='small' variant='contained' component='span'>
-              Upload
-            </Button>
-          </label>
+          <CreateDishButton />
+        </Stack>
 
 
-          {/* Dish image data */}
-          {isSelected ? (
-            <div>
-              <p>Filename: {selectedFile.name}</p>
-              <p>Filetype: {selectedFile.type}</p>
-              <p>Size in bytes: {selectedFile.size}</p>
-              <p>
-                lastModifiedDate:
-                {selectedFile.lastModifiedDate.toLocaleDateString()}
-              </p>
-            </div>
-          ) : (
-            <p>Choose a picture of a dish</p>
-          )}
 
-          {/*  Save dish data  */}
-          <Button variant='contained' color='success' onClick={Save}>
-            Сохранить
-          </Button>
-        </Box>
+        {isEdit &&
+          <>
+            {/* Input dish data */}
+            < Box
+              component='form'
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                '& > :not(style)': { m: 1, width: '30ch' }
+              }}
+              noValidate
+              autoComplete='off'
+            >
+              <TextField
+                InputLabelProps={{ shrink: true }}
+                label='Название:'
+                name='name'
+                value={form.name}
+                onChange={changeHandler}
+              />
+              <TextField
+                InputLabelProps={{ shrink: true }}
+                label='Цена:'
+                name='cost'
+                value={form.cost}
+                onChange={changeHandler}
+              />
+              <TextField
+                InputLabelProps={{ shrink: true }}
+                label='Ед.изм:'
+                name='measure'
+                value={form.measure}
+                onChange={changeHandler}
+              />
+              {isEdit && <img src={`${apiUrl}/${form.image}`} alt={form.image} />}
 
-        {/*  Menu table  */}
+            </Box >
+
+            {/*  Input dish image  */}
+            <Box
+              sx={{
+                '& > :not(style)': { mb: 2 }
+              }}
+            >
+              <input
+                type='file'
+                name="images"
+                accept='image/*'
+                onChange={saveFile}
+                style={{ display: 'none' }}
+                id='raised-button-file'
+                multiple
+              />
+              <label htmlFor='raised-button-file'>
+                <Button size='small' variant='contained' component='span'>
+                  Додати зображення страви
+                </Button>
+              </label>
+
+
+              {/* Dish image data */}
+              {isSelected ? (
+                <div>
+                  <p>Filename: {selectedFile.name}</p>
+                  <p>Filetype: {selectedFile.type}</p>
+                  <p>Size in bytes: {selectedFile.size}</p>
+                  <p>
+                    lastModifiedDate:
+                    {selectedFile.lastModifiedDate.toLocaleDateString()}
+                  </p>
+                  <img src={URL.createObjectURL(selectedFile)} alt="Uploaded" width="200" />
+
+                </div>
+              ) : (
+                <p>Choose a picture of a dish</p>
+              )}
+
+              {/*  Save dish data  */}
+              <Button variant='contained' color='success' onClick={Save}>
+                Сохранить
+              </Button>
+            </Box>
+          </>
+        }
+
+        {/* ------------------------------------------------------------------------------------------------- */}
+
+        {/*  All Menu table  */}
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label='simple table'>
             <TableHead>
@@ -313,7 +339,7 @@ export const CreateMenuPage = () => {
                       key={product.id}
                       onClick={() => getDish(product._id)}
                     >
-                      Edit
+                      Редагувати
                     </Button>
                   </StyledTableCell>
                   <StyledTableCell align='right'>

@@ -7,6 +7,7 @@ import { apiUrl } from "./constants";
 // };
 
 
+// Get all menu
 const getMenu = async () => {
     const res = await fetch(`${apiUrl}/api/menu`);
     const menu = await res.json();
@@ -14,7 +15,7 @@ const getMenu = async () => {
 };
 
 
-// Get a dish from server
+// Get a dish By Id
 async function getDishById(id: string) {
     const res = await fetch(`${apiUrl}/api/menu/` + id, {
         method: 'GET',
@@ -24,6 +25,22 @@ async function getDishById(id: string) {
         return await res.json();
     }
 }
+
+
+// Сreate Dish
+async function submitMenuApi(form: any) {
+    const res = await fetch(`${apiUrl}/api/menu`, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json'
+        },
+        body: form
+    });
+    if (res.ok === true) {
+        return await res.json();
+    }
+}
+
 
 // Change Dish
 async function editDishApi(form: any) {
@@ -41,8 +58,8 @@ async function editDishApi(form: any) {
 }
 
 
-// Remove dish
-async function DeleteDishApi(id: string) {
+// Remove Dish
+async function deleteDishApi(id: string) {
     const res = await fetch(`${apiUrl}/api/menu/` + id, {
         method: 'DELETE',
         headers: { Accept: 'application/json' }
@@ -53,19 +70,4 @@ async function DeleteDishApi(id: string) {
 }
 
 
-// Change Dish
-async function submitMenuApi(form: any) {
-    const res = await fetch(`${apiUrl}/api/menu`, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json'
-        },
-        body: form
-    });
-    if (res.ok === true) {
-        return await res.json();
-    }
-}
-
-
-export { getMenu, getDishById, editDishApi, DeleteDishApi, submitMenuApi };
+export { getMenu, getDishById, submitMenuApi, editDishApi, deleteDishApi };

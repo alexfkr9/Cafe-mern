@@ -227,6 +227,55 @@ exports.createMenu = async (req, res) => {
   });
 };
 
+exports.editMenuById = async function (req, res) {
+  // if(!req.body) return res.sendStatus(400);
+
+  // const menuId = req.body._id;
+  // console.log(req.body.name);
+  // let menu = {
+  //     _id: menuId,
+  //     name: req.body.name,
+  //     cost: req.body.cost,
+  //     measure: req.body.measure
+  // };
+
+  // let data = await fs.readFileSync(menuLocDB, "utf8");
+  // const menus = JSON.parse(data);
+
+  // for(var i=0; i<menus.length; i++){
+  //     if(menus[i]._id==menuId){
+  //         menus[i] = menu;  console.log(menus[i].name)
+  //         break;
+  //     }
+  // }
+  // data = JSON.stringify(menus);
+  // fs.writeFileSync(menuLocDB, data);
+  // res.send("menus");
+
+  // for change image
+  // const form = JSON.parse(req.body.form);
+  // let fileExt = path.parse(req.file.originalname).ext;
+
+  const id = req.body._id;
+
+  const newMenu = {
+    name: req.body.name,
+    cost: req.body.cost,
+    measure: req.body.measure
+    // image: form.name + fileExt
+  };
+
+  Menu.findOneAndUpdate(
+    { _id: id },
+    newMenu,
+    { new: true },
+    function (err, menu) {
+      if (err) return console.log(err);
+      res.send(menu);
+    }
+  );
+};
+
 exports.deleteMenuById = async function (req, res) {
   // console.log(id);
   // let data = await fs.readFileSync(menuLocDB, "utf8");
@@ -259,46 +308,4 @@ exports.deleteMenuById = async function (req, res) {
   });
 };
 
-exports.editMenuById = async function (req, res) {
-  // if(!req.body) return res.sendStatus(400);
 
-  // const menuId = req.body._id;
-  // console.log(req.body.name);
-  // let menu = {
-  //     _id: menuId,
-  //     name: req.body.name,
-  //     cost: req.body.cost,
-  //     measure: req.body.measure
-  // };
-
-  // let data = await fs.readFileSync(menuLocDB, "utf8");
-  // const menus = JSON.parse(data);
-
-  // for(var i=0; i<menus.length; i++){
-  //     if(menus[i]._id==menuId){
-  //         menus[i] = menu;  console.log(menus[i].name)
-  //         break;
-  //     }
-  // }
-  // data = JSON.stringify(menus);
-  // fs.writeFileSync(menuLocDB, data);
-  // res.send("menus");
-
-  const id = req.body._id;
-
-  const newMenu = {
-    name: req.body.name,
-    cost: req.body.cost,
-    measure: req.body.measure
-  };
-
-  Menu.findOneAndUpdate(
-    { _id: id },
-    newMenu,
-    { new: true },
-    function (err, menu) {
-      if (err) return console.log(err);
-      res.send(menu);
-    }
-  );
-};
