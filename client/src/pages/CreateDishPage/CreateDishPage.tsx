@@ -9,100 +9,45 @@ import {
     TextField,
 } from '@mui/material';
 
+import { Link, NavLink } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import { editDishApi, getMenu, submitMenuApi } from '../../api/menuApi';
+import { submitMenuApi } from '../../api/menuApi';
+
+import "./CreateDishPage.scss";
+
+// {
+//     "_id": "6606b10cfcb01d0fa461b64e",
+//     "name": "nameDish",
+//     "cost": 43,
+//     "measure": "p",
+//     "image": "nameImg.jpeg"
+// }
 
 export const CreateDishPage = () => {
     const [error, setError] = useState<any>(null);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
-    const [menu, setMenu] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(true);
+    const [isCreated, setIsCreated] = useState(false);
 
     const [form, setForm] = useState({ _id: 0, name: '', cost: '', measure: '', image: "" });
-
-    // Get Menu data
-    useEffect(() => {
-        getMenu()
-            .then(
-                (res) => {
-                    setIsLoaded(true);
-                    setMenu(res);
-                })
-            .catch((error: any) => {
-                setIsLoaded(true);
-                setError(error);
-            });
-
-        // .then(
-        //   (res) => {
-        //     setIsLoaded(true);
-        //     setMenu(res);
-        //   },
-        //   (error: any) => {
-        //     console.log("useEffect ~ error:", error);
-
-        //     setIsLoaded(true);
-        //     setError(error);
-        //   }
-        // );
-    }, []);
-
-
-    // Update
-    async function updateMenu() {
-        try {
-            const res = await getMenu();
-            setIsLoaded(true);
-            setMenu(res);
-        } catch (error) {
-            setIsLoaded(true);
-            setError(error);
-        }
-    }
-
-
-    // Change Dish
-    async function editDish() {
-        try {
-            await editDishApi(form);
-            setIsLoaded(true);
-            updateMenu();
-        } catch (error) {
-            setIsLoaded(true);
-            setError(error);
-        }
-        console.log("editDish ~ form:", form);
-    }
-
 
 
     const changeHandler = (e: { target: { name: any; value: any; }; }) => {
         setForm((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
     };
 
-    // отправка формы
-    function Save() {
-        if (form._id === 0) {
-            submitUser();
-        } else {
-            console.log('editDish');
-            editDish();
-        }
-    }
 
-    // Отправка файла
     const [selectedFile, setSelectedFile] = useState<any>();
     const [isSelected, setIsSelected] = useState(false);
 
-    const saveFile = (event: any) => {
+    // select Image and put in state
+    const selectImage = (event: any) => {
         console.log("🚀 ~ submitUser ~ selectedFile:", event.target.files[0]);
         setSelectedFile(event.target.files[0]);
         setIsSelected(true);
     };
 
-    console.log("🚀 ~ submitUser ~ selectedFile:", selectedFile);
-
+    // create Form Data before sending
     const getFormData = () => {
         const formData = new FormData();
         formData.append('file', selectedFile);
@@ -110,32 +55,68 @@ export const CreateDishPage = () => {
         return formData;
     };
 
+    // Send form
     const submitUser = async () => {
         console.log("submitUser ~ getFormData:", getFormData());
         try {
+            setIsLoaded(false);
             const res = await submitMenuApi(getFormData());
             console.log("submitUser ~ res:", res);
             setIsLoaded(true);
-            updateMenu();
+            setIsCreated(true);
         } catch (error) {
             setIsLoaded(true);
             setError(error);
+
         }
     };
 
 
+    // IsCreatedMessage Component
+    const IsCreatedMessage = () => {
 
-    // return <h1>Create Menu</h1>;
+        // Reset form fields after submit
+        const refreshPage = () => {
+            window.location.reload();
+        };
+
+        return (
+            <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                minHeight={`calc(100vh - 102px)`} // Set the minimum height of the box to fill the viewport
+            >
+                <Box
+                    textAlign="center"
+                    p={5}
+                    sx={{ border: '2px solid grey', bgcolor: 'success.light' }}>
+                    <h1 color="primary.dark">Страва додана в меню</h1>
+                    <Button variant="contained" onClick={refreshPage}>
+                        Додати ще страву
+                    </Button>
+                    <p></p>
+                    <Button component={Link} to="/create-menu" variant="contained" color="secondary">
+                        Повернутися на сторінку меню
+                    </Button>
+                </Box>
+            </Box >
+        );
+    };
 
     if (error) {
         return <div>Помилкака: {error.message}</div>;
-    } else if (!isLoaded) {
+    }
+    else if (!isLoaded) {
         return <Loader />;
-    } else {
+    }
+    else if (isCreated) {
+        return <IsCreatedMessage />;
+    }
+    else {
         return (
             <>
-
-                <h2>{!isEdit ? "Зробити меню" : "Редагування страви"}</h2>
+                <h2>Зробити нову страву</h2>
 
                 {/*  Input dish data  */}
                 <Box
@@ -169,7 +150,7 @@ export const CreateDishPage = () => {
                         value={form.measure}
                         onChange={changeHandler}
                     />
-                    {isEdit && <img src={`${apiUrl}/${form.image}`} alt={form.image} />}
+                    <img src={`${apiUrl}/${form.image}`} alt={form.image} />
 
                 </Box>
 
@@ -183,7 +164,7 @@ export const CreateDishPage = () => {
                         type='file'
                         name="images"
                         accept='image/*'
-                        onChange={saveFile}
+                        onChange={selectImage}
                         style={{ display: 'none' }}
                         id='raised-button-file'
                         multiple
@@ -213,7 +194,7 @@ export const CreateDishPage = () => {
                     )}
 
                     {/*  Save dish data  */}
-                    <Button variant='contained' color='success' onClick={Save}>
+                    <Button variant='contained' color='success' onClick={submitUser}>
                         Сохранить
                     </Button>
                 </Box>

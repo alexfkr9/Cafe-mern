@@ -36,9 +36,13 @@ async function submitMenuApi(form: any) {
         },
         body: form
     });
-    if (res.ok === true) {
-        return await res.json();
-    }
+
+    return await res.json();
+
+    // так не проходе помилка 
+    // if (res.ok === true) {
+    //     return await res.json();
+    // }
 }
 
 
