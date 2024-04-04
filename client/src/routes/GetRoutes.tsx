@@ -9,11 +9,11 @@ import { CreateDishPage } from '../pages/CreateDishPage/CreateDishPage';
 export const GetRoutes = () => {
   return (
     <Routes>
-      <Route path='/user' element={<MainPage />}></Route>
+      <Route path='/' element={<MainPage />}></Route>
       <Route path='/admin' element={<AdminPage />}></Route>
       <Route path='/create-menu' element={<CreateMenuPage />}></Route>
       <Route path='/create-dish' element={<CreateDishPage />}></Route>
-      <Route path='*' element={<Navigate to='/user' replace />} />
+      <Route path='*' element={<Navigate to='/' replace />} />
     </Routes>
   );
 };

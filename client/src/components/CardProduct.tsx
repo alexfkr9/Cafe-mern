@@ -7,13 +7,11 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-import NoImg from "../assets/images/soup.jpg";
+import noImg from "../assets/images/soup.jpg";
 import { apiUrl } from '../api/constants';
 import Stack from '@mui/material/Stack';
 import Cart from './AddProductQty';
 import styled from '@emotion/styled';
-import { AspectRatio } from '@mui/icons-material';
-import { Box } from '@mui/material';
 
 const CardContentNoPadding = styled(CardContent)(`
   padding: 20px;
@@ -24,8 +22,11 @@ const CardContentNoPadding = styled(CardContent)(`
 
 export default function CardProduct({ product }: any) {
     const { _id, name, cost, measure, image, alt } = product;
-    const imageUrl = `${apiUrl}/${image}`;
-
+    // const imageUrl = `${apiUrl}/${image}`;
+    const srcImg =
+        _id
+            ? `${apiUrl}/${image}`
+            : noImg;
 
     return (
 
@@ -34,7 +35,7 @@ export default function CardProduct({ product }: any) {
                 <CardMedia
                     component="img"
                     alt={alt}
-                    image={imageUrl || NoImg}
+                    image={srcImg}
                     className="card-img" />
             </div>
 

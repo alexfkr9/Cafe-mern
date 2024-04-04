@@ -21,14 +21,14 @@ import "./Navbar.css";
 export const Navbar = () => {
 
 
-  const [pages, setPages] = useState([['user', 'головна'], ['admin', 'адмін панель']]);
+  const [pages, setPages] = useState([['', 'головна'], ['admin', 'адмін панель']]);
 
   function switchNavItems(event: { target: any; }) {
 
     const item = event.target.pathname;
     console.log("switchNavItems ~ item:", event);
-    if (item === "/user") { setPages([['user', 'головна'], ['admin', 'адмін панель']]); }
-    if (item === "/admin" || item === '/create-menu') { setPages([['user', 'головна'], ['admin', 'адмін панель'], ['create-menu', 'створити меню']]); }
+    if (item === "/") { setPages([['', 'головна'], ['admin', 'адмін панель']]); }
+    if (item === "/admin" || item === '/create-menu') { setPages([['', 'головна'], ['admin', 'адмін панель'], ['create-menu', 'створити меню']]); }
   };
 
   // const settings = ['admin', 'user', 'create_menu'];
