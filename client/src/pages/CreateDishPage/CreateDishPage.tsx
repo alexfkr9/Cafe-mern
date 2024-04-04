@@ -14,7 +14,7 @@ import { Link, NavLink } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { submitMenuApi } from '../../api/menuApi';
 
-import "./CreateDishPage.scss";
+// import "./CreateDishPage.scss";
 
 // {
 //     "_id": "6606b10cfcb01d0fa461b64e",

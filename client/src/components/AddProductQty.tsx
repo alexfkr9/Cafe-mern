@@ -47,12 +47,10 @@ function AddProductQty({ id }: any) {
 
 
     return (
-        <div>
+        <>
             <Button variant="outlined" onClick={decreaseQuantity}>-</Button>
             <span>{quantity}</span>
             <Button variant="outlined" onClick={increaseQuantity}>+</Button>
-
-            <h2>Shopping Cart</h2>
             {/* <ul>
                 {cartItems.map(item => (
                     <li key={item.id}>
@@ -63,8 +61,7 @@ function AddProductQty({ id }: any) {
                     </li>
                 ))}
             </ul> */}
-            <button onClick={handleClearCart}>Clear Cart</button>
-        </div>
+        </>
     );
 }
 

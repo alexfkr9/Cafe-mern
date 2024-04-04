@@ -9,7 +9,8 @@ import Snack from '../components/Snack';
 import {
   Button,
   TextField,
-  Grid
+  Grid,
+  Container
 } from '@mui/material';
 
 import Box from '@mui/material/Box';
@@ -108,12 +109,12 @@ export const MainPage = () => {
     return <Loader />;
   } else {
     return (
-      <>
+      <Container maxWidth="lg">
         <h2>Создать заказ</h2>
         <Box
           component='form'
           sx={{
-            '& > :not(style)': { m: 1, width: '30ch' }
+            '& > :not(style)': { my: 1, mr: 2, width: '30ch' }
           }}
           noValidate
           autoComplete='off'
@@ -136,17 +137,17 @@ export const MainPage = () => {
         </Box>
 
         {/* Product items */}
-        <Grid container p={4} spacing={2} >
-
+        {/* <Grid container maxWidth="1140px" mx="auto" p={2} spacing={2} > */}
+        <Grid container spacing={2} >
           {menu.map((product: any, index: number) => (
-            <Grid item xs={6} md={3}>
+            <Grid item xs={6} md={4}>
               <CardProduct product={product} />
             </Grid>
           ))}
         </Grid>
 
         <Snack isOpen={isSnackOpen} handleClose={() => setSnackOpen(false)} />
-      </>
+      </Container>
     );
   }
 };

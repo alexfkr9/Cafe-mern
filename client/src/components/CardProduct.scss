@@ -1,0 +1,37 @@
+@import "../styles/variables";
+
+.cafe-card {
+    border: $--base-border;
+    border-radius: $--border-radius;
+    overflow: hidden;
+    position: relative;
+
+
+    .card-header {
+        padding: 0;
+        border: none;
+        border-bottom: $--base-border;
+        position: relative;
+        padding-top: 70%;
+    }
+
+    .card-img {
+        position: absolute;
+        width: auto;
+        height: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+}
+
+@media (hover: hover) {
+    .cafe-card {
+        &:hover {
+            top: -2px;
+            left: -2px;
+            box-shadow: $--base-shadow;
+        }
+    }
+}
