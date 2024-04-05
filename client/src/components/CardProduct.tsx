@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-import noImg from "../assets/images/soup.jpg";
+import noImg from "../assets/images/noimg.png";
 import { apiUrl } from '../api/constants';
 import Stack from '@mui/material/Stack';
 import Cart from './AddProductQty';
@@ -21,12 +21,14 @@ const CardContentNoPadding = styled(CardContent)(`
 `);
 
 export default function CardProduct({ product }: any) {
+    console.log("CardProduct ~ product:", product);
     const { _id, name, cost, measure, image, alt } = product;
-    // const imageUrl = `${apiUrl}/${image}`;
-    const srcImg =
-        _id
-            ? `${apiUrl}/${image}`
-            : noImg;
+    const srcImg = `${apiUrl}/${image}`;
+
+    // replace srcImg with noImg
+    const onImageError = (e: any) => {
+        e.target.src = noImg;
+    };
 
     return (
 
@@ -34,9 +36,10 @@ export default function CardProduct({ product }: any) {
             <div className="card-header">
                 <CardMedia
                     component="img"
-                    alt={alt}
+                    alt={name}
                     image={srcImg}
-                    className="card-img" />
+                    className="card-img"
+                    onError={onImageError} />
             </div>
 
             < CardContentNoPadding >
