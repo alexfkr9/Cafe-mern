@@ -23,3 +23,8 @@ a.nav-link.active {
     border-radius: 2px;
     background-color: rgba(225, 245, 8, 0.428);
 }
+
+
+.nav-link.active.cart::after {
+    height: 0;
+}

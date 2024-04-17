@@ -10,8 +10,6 @@ const orderSlice = createSlice({
         //     state.todos = action.payload
         // }
         setCurrentOrder: (state, action) => {
-            console.log("action:", action)
-            console.log("state:", state)
             state.order = action.payload
         }
     },

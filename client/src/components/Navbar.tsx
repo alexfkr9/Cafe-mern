@@ -17,6 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import "./Navbar.css";
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
 export const Navbar = () => {
 
@@ -98,6 +99,16 @@ export const Navbar = () => {
                 </NavLink>
               </Button>
             ))}
+          </Box>
+
+
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, ml: 2 }}>
+            <NavLink
+              className="nav-link cart"
+              to="/cart"
+            >
+              <ShoppingCartOutlinedIcon fontSize="large" />
+            </NavLink>
           </Box>
 
 

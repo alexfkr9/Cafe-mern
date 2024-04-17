@@ -16,9 +16,13 @@ import {
 import Box from '@mui/material/Box';
 import { getMenu } from '../api/menuApi';
 import CardProduct from '../components/CardProduct';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMenu } from '../redux/menuSlice';
 
 export const MainPage = () => {
+
+  const dispatch = useDispatch();
+
   const [error, setError] = useState<any>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [menu, setMenu] = useState([]);
@@ -36,6 +40,7 @@ export const MainPage = () => {
         (res) => {
           setIsLoaded(true);
           setMenu(res);
+          dispatch(addMenu(res));
         })
       .catch((error: any) => {
         setIsLoaded(true);

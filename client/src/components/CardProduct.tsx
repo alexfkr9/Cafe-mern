@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import noImg from "../assets/images/noimg.png";
 import { apiUrl } from '../api/constants';
 import Stack from '@mui/material/Stack';
-import Cart from './AddProductQty';
+import AddProductQty from './AddProductQty';
 import styled from '@emotion/styled';
 
 const CardContentNoPadding = styled(CardContent)(`
@@ -54,7 +54,7 @@ export default function CardProduct({ product }: any) {
                         {cost} {measure}
                     </Typography>
                     <CardActions sx={{ pr: 0 }}>
-                        <Cart id={_id} />
+                        <AddProductQty id={_id} />
                     </CardActions>
                 </Stack>
 
